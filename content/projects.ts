@@ -1,0 +1,184 @@
+export type Accent = "build" | "watch";
+
+export type ProjectMedia = {
+  src: string;
+  alt: string;
+  playhead: boolean;
+};
+
+export type Project = {
+  slug: string;
+  index: string;
+  timecode: string;
+  name: string;
+  tagline: string | null;
+  taglineIsBengali: boolean;
+  cardLine: string;
+  accent: Accent;
+  meta: { role: string; type: string; stack: string };
+  problem: string;
+  solution: string;
+  solutionPoints: string[];
+  challenges: string[];
+  architecture: string;
+  media: ProjectMedia[];
+  links: { label: string; href: string }[];
+};
+
+export const projects: Project[] = [
+  {
+    slug: "hishabai",
+    index: "PROJ 01",
+    timecode: "00:01:08:16",
+    name: "HishabAI",
+    tagline: "Smart হিসাব. Smarter Business.",
+    taglineIsBengali: true,
+    cardLine: "Smart হিসাব. Smarter Business.",
+    accent: "build",
+    meta: {
+      role: "TODO: role on HishabAI",
+      type: "TODO: project type",
+      stack: "TODO: HishabAI stack",
+    },
+    problem: "TODO: problem statement for HishabAI",
+    solution:
+      "A web-based business management and bookkeeping platform designed to make accounting easier for small businesses.",
+    solutionPoints: [
+      "Income & expense tracking",
+      "Inventory management",
+      "Customer and vendor ledgers",
+      "Multiple companies under one account",
+      "Cash, bank, and mobile financial service tracking",
+      "AI voice input",
+      "Receipt/memo scanning",
+      "Bengali language support",
+      "Smart accounting logic behind a simple diary-style interface",
+    ],
+    challenges: ["TODO: key challenges on HishabAI"],
+    architecture: "TODO: architecture notes for HishabAI",
+    media: [
+      { src: "/work/hishabai-1.jpg", alt: "TODO: HishabAI screenshot 1", playhead: false },
+      { src: "/work/hishabai-2.jpg", alt: "TODO: HishabAI screenshot 2", playhead: false },
+      { src: "/work/hishabai-3.jpg", alt: "TODO: HishabAI screenshot 3", playhead: false },
+    ],
+    links: [{ label: "TODO: live URL", href: "#" }],
+  },
+  {
+    slug: "aid-for-men",
+    index: "PROJ 02",
+    timecode: "00:01:24:03",
+    name: "Aid For Men Foundation",
+    tagline: "Building a scalable content platform for a nonprofit organization",
+    taglineIsBengali: false,
+    cardLine: "Building a scalable content platform for a nonprofit organization",
+    accent: "build",
+    meta: {
+      role: "TODO: role on Aid For Men Foundation",
+      type: "TODO: project type",
+      stack:
+        "Next.js · Tailwind · Bengali UI · Authentication · Admin dashboard · Supabase · Image storage · Blog/content management · User management",
+    },
+    problem: "TODO: problem statement for Aid For Men Foundation",
+    solution: "Building a scalable content platform for a nonprofit organization",
+    solutionPoints: [
+      "Next.js",
+      "Tailwind",
+      "Bengali UI",
+      "Authentication",
+      "Admin dashboard",
+      "Supabase",
+      "Image storage",
+      "Blog/content management",
+      "User management",
+    ],
+    challenges: [
+      "Authentication",
+      "Admin authorization",
+      "Database design",
+      "Image uploads",
+      "Dynamic content",
+      "Responsive UI",
+      "CMS-like functionality",
+    ],
+    architecture: "TODO: architecture notes for Aid For Men Foundation",
+    media: [
+      { src: "/work/aid-for-men-1.jpg", alt: "TODO: Aid For Men screenshot 1", playhead: false },
+      { src: "/work/aid-for-men-2.jpg", alt: "TODO: Aid For Men screenshot 2", playhead: false },
+      { src: "/work/aid-for-men-3.jpg", alt: "TODO: Aid For Men screenshot 3", playhead: false },
+    ],
+    links: [{ label: "TODO: live URL", href: "#" }],
+  },
+  {
+    slug: "relaxe-performance-ads",
+    index: "PROJ 03",
+    timecode: "00:01:39:11",
+    name: "Relaxe — Performance Ad Creative",
+    tagline: null,
+    taglineIsBengali: false,
+    cardLine: "Editing, creative execution, AI visuals",
+    accent: "watch",
+    meta: {
+      role: "Editing, creative execution, AI visuals",
+      type: "UGC / Meta Ad",
+      stack: "TODO: tools used on Relaxe",
+    },
+    problem:
+      "Explain product benefits while maintaining fast pacing and native-feeling ad creative.",
+    solution: "TODO: solution summary for Relaxe",
+    solutionPoints: [
+      "Edited the UGC structure",
+      "Built visual demonstrations",
+      "Added pattern interrupts",
+      "Created AI-generated supporting visuals",
+      "Optimized pacing around the script",
+    ],
+    challenges: [
+      "Explain product benefits while maintaining fast pacing and native-feeling ad creative.",
+    ],
+    architecture: "TODO: creative structure notes for Relaxe",
+    media: [
+      { src: "/work/relaxe-performance-ads-1.jpg", alt: "TODO: Relaxe frame 1", playhead: true },
+      { src: "/work/relaxe-performance-ads-2.jpg", alt: "TODO: Relaxe frame 2", playhead: true },
+      { src: "/work/relaxe-performance-ads-3.jpg", alt: "TODO: Relaxe frame 3", playhead: true },
+    ],
+    links: [{ label: "TODO: ad link", href: "#" }],
+  },
+  {
+    slug: "movie-discovery",
+    index: "PROJ 04",
+    timecode: "00:01:47:22",
+    name: "Movie Discovery App (TMDB API)",
+    tagline: null,
+    taglineIsBengali: false,
+    cardLine: "TODO: one-line role for Movie Discovery App",
+    accent: "build",
+    meta: {
+      role: "TODO: role on Movie Discovery App",
+      type: "TODO: project type",
+      stack: "TMDB API",
+    },
+    problem: "TODO: problem statement for Movie Discovery App",
+    solution: "TODO: solution summary for Movie Discovery App",
+    solutionPoints: [
+      "API integration",
+      "Search",
+      "Dynamic routing",
+      "Loading/error states",
+      "Responsive design",
+    ],
+    challenges: ["TODO: key challenges on Movie Discovery App"],
+    architecture: "TODO: architecture notes for Movie Discovery App",
+    media: [
+      { src: "/work/movie-discovery-1.jpg", alt: "TODO: Movie Discovery screenshot 1", playhead: false },
+      { src: "/work/movie-discovery-2.jpg", alt: "TODO: Movie Discovery screenshot 2", playhead: false },
+      { src: "/work/movie-discovery-3.jpg", alt: "TODO: Movie Discovery screenshot 3", playhead: false },
+    ],
+    links: [{ label: "TODO: live URL", href: "#" }],
+  },
+];
+
+export const projectSlugs = projects.map((p) => p.slug);
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug);
+}

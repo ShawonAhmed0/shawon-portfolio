@@ -1,26 +1,714 @@
 @import "tailwindcss";
 
+@source "../app";
+@source "../components";
+@source "../content";
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Light warm system. Every surface, hairline and text tone is a token, so
+ * flipping the site from the old near-black world happens here rather than
+ * in the components.
+ * ────────────────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Grounds — warm paper, not clinical white */
+  --ink: #faf7f2;          /* page */
+  --ink-raised: #f4efe7;   /* alternating band */
+  --surface: #ffffff;      /* cards */
+  --surface-2: #f6f2ec;    /* wells, chips */
+
+  /* Hairlines */
+  --line: #e4ddd2;
+  --line-soft: #efe9e0;
+
+  /* Type */
+  --bone: #16130f;   /* primary — warm near-black */
+  --muted: #6d6559;  /* secondary */
+  --faint: #9c948a;  /* tertiary */
+
+  /* Accents. The portrait is rim-lit warm amber, so the hero bloom is built
+   * from that family; the cool tone carries the engineering surfaces. */
+  --build: #2f5bd7;
+  --watch: #e07a24;
+
+  /* Hero bloom stops */
+  --bloom-1: #ffd7a1;
+  --bloom-2: #ffc4c0;
+  --bloom-3: #d6e2ff;
+
+  --r: 4px;
+  --pill: 999px;
+  --shell-max: 1440px; /* max content width; referenced by .shell */
+
+  /* Derived (aliases only) */
+  --build-wash: color-mix(in srgb, var(--build) 8%, transparent);
+  --watch-wash: color-mix(in srgb, var(--watch) 10%, transparent);
+  --build-line: color-mix(in srgb, var(--build) 34%, var(--line));
+  --watch-line: color-mix(in srgb, var(--watch) 34%, var(--line));
+  --build-glow: radial-gradient(90% 70% at 30% 100%, var(--build) 0%, transparent 70%);
+  --watch-glow: radial-gradient(90% 70% at 30% 100%, var(--watch) 0%, transparent 70%);
+
+  --ambient-1: #fdf6ea;
+  --ambient-2: #f3f0fb;
+
+  --lift: color-mix(in srgb, #ffffff 70%, transparent);
+  --shadow-panel: 0 18px 44px -28px rgb(40 30 20 / 0.28);
+  --shadow-card: 0 2px 4px rgb(40 30 20 / 0.04), 0 12px 32px -12px rgb(40 30 20 / 0.10);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    background: var(--ink);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    position: relative;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  /* Fixed ambient wash so the page has a light source instead of reading
+   * as one dead flat value. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(75% 55% at 15% 0%, var(--ambient-1) 0%, transparent 68%),
+      radial-gradient(65% 50% at 85% 100%, var(--ambient-2) 0%, transparent 68%),
+      var(--ink);
+  }
+
+  ::selection {
+    background: var(--bone);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .t-hero {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6.2vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-transform: none;
+  }
+
+  .t-h2 {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.875rem, 3.6vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    text-transform: none;
+  }
+
+  .t-h3 {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+    line-height: 1.2;
+    letter-spacing: -0.018em;
+  }
+
+  .t-lead {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+    line-height: 1.45;
+    color: var(--bone);
+  }
+
+  .t-body {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.15vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .t-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Bengali-capable stacks — applied only to strings containing Bengali. */
+  .t-bn {
+    font-family:
+      var(--font-body), var(--font-bengali), ui-sans-serif, system-ui,
+      sans-serif;
+  }
+
+  .t-bn-display {
+    font-family:
+      var(--font-display), var(--font-bengali), ui-sans-serif, system-ui,
+      sans-serif;
+  }
+
+  /* Elevated panel: top-edge light catch + grounding shadow. */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+    transition:
+      box-shadow 380ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  a.panel:hover {
+    border-color: color-mix(in srgb, var(--bone) 18%, var(--line));
+    box-shadow:
+      0 2px 4px rgb(40 30 20 / 0.04),
+      0 26px 60px -22px rgb(40 30 20 / 0.20);
+  }
+
+  /* Cutout portrait on paper. The echo still does the blending work, but at
+   * lower opacity — on a light ground a strong echo reads as a smudge. */
+  .portrait-wrap {
+    position: relative;
+  }
+
+  .portrait-echo {
+    position: absolute;
+    inset: -6% -10% 4% -10%;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(40px) saturate(1.25);
+    opacity: 0.32;
+    transform: scale(1.05);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 94%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 94%);
+  }
+
+  .portrait-cutout {
+    -webkit-mask-image: linear-gradient(
+      to bottom, #000 0%, #000 62%, rgba(0,0,0,0.85) 80%,
+      rgba(0,0,0,0.4) 92%, transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom, #000 0%, #000 62%, rgba(0,0,0,0.85) 80%,
+      rgba(0,0,0,0.4) 92%, transparent 100%
+    );
+  }
+
+  /* A still portrait in a moving gradient reads as frozen. This is a very
+   * slow idle drift — 8s, 7px — enough to feel alive, not enough to notice. */
+  .idle-float {
+    animation: idle-float 8s ease-in-out infinite;
+  }
+
+  /* Section header with an oversized ghost word behind it (video 1). The
+   * ghost is decorative only, so it is aria-hidden at the call site. */
+  .ghost-head {
+    position: relative;
+  }
+
+  .ghost-head > .ghost {
+    position: absolute;
+    left: -0.04em;
+    top: -0.42em;
+    z-index: 0;
+    pointer-events: none;
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: color-mix(in srgb, var(--bone) 5%, transparent);
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .ghost-head > *:not(.ghost) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Video portrait. Its cream backdrop already matches --ink, so only the
+   * edges need softening for it to read as part of the page rather than a
+   * video window sitting on top of it. */
+  .portrait-clip {
+    /* The canvas flattens to paper behind this element, so the clip's cream
+     * ground already matches and only the edges need dissolving. The mask must
+     * complete its fade INSIDE the box — sized over 100% it never reaches
+     * transparent at the corners and the rectangle stays visible. */
+    -webkit-mask-image: radial-gradient(
+      78% 86% at 50% 44%,
+      #000 34%,
+      rgba(0, 0, 0, 0.72) 62%,
+      rgba(0, 0, 0, 0.22) 84%,
+      transparent 97%
+    );
+    mask-image: radial-gradient(
+      78% 86% at 50% 44%,
+      #000 34%,
+      rgba(0, 0, 0, 0.72) 62%,
+      rgba(0, 0, 0, 0.22) 84%,
+      transparent 97%
+    );
+  }
+
+  /* Ticker. Translating -50% works because the track holds exactly two
+   * identical rows, so the reset lands on a matching frame. */
+  .marquee-track {
+    animation: marquee 42s linear infinite;
+  }
+
+  .marquee-mask {
+    -webkit-mask-image: linear-gradient(
+      to right, transparent 0%, #000 8%, #000 92%, transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right, transparent 0%, #000 8%, #000 92%, transparent 100%
+    );
+  }
+
+  /* Scroll cue */
+  .scroll-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .scroll-cue i {
+    display: block;
+    width: 1px;
+    height: 26px;
+    background: linear-gradient(to bottom, var(--line), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-cue i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--bone), transparent);
+    animation: cue 2.4s ease-in-out infinite;
+  }
+
+  /* Headline words rise in sequence — --i sets each word's place in the run. */
+  .word {
+    display: inline-block;
+    animation: rise-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.14s + var(--i) * 0.075s);
+  }
+
+  /* ── Contact sheet ──────────────────────────────────────────────────
+   * Same two-layer split as the chips: shell handles pointer parallax, inner
+   * handles the drift, because one element cannot own `transform` twice.
+   */
+  .sheet-shell {
+    transform: translate(
+      calc(var(--mx, 0) * var(--depth, 20) * -1px),
+      calc(var(--my, 0) * var(--depth, 20) * -1px)
+    );
+    will-change: transform;
+  }
+
+  .sheet-drift {
+    animation-name: sheet-drift;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  .sheet-plate {
+    border-radius: 10px;
+    /* Texture, not subject. At 0.5 the current plates read as soft blobs
+     * because they are generated gradients with no detail — a hairline edge
+     * makes them read as frames instead. Real reel stills will carry this
+     * far better; raise the opacity once they exist. */
+    opacity: 0.32;
+    filter: contrast(1.1) saturate(1.05);
+    outline: 1px solid color-mix(in srgb, var(--bone) 8%, transparent);
+    outline-offset: -1px;
+    box-shadow: 0 16px 40px -24px rgb(40 30 20 / 0.5);
+  }
+
+  /* ── Bezier graph ───────────────────────────────────────────────── */
+  .bezier-graph {
+    width: 150px;
+    height: 120px;
+    opacity: 0.85;
+  }
+
+  /* ── Floating chips ─────────────────────────────────────────────────
+   * Two nested layers on purpose: the shell does pointer parallax, the inner
+   * element does the idle float. One element cannot hold both, because the
+   * two would fight over `transform`.
+   */
+  .chip-shell {
+    transform: translate(
+      calc(var(--mx, 0) * var(--depth, 20) * 1px),
+      calc(var(--my, 0) * var(--depth, 20) * 1px)
+    );
+    will-change: transform;
+  }
+
+  .chip-float {
+    display: inline-block;
+    animation: chip-float 7s ease-in-out infinite;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+    border-radius: var(--pill);
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    backdrop-filter: blur(10px);
+    padding: 0.42rem 0.85rem;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--bone);
+    box-shadow: var(--shadow-card);
+  }
+
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--pill);
+    background: var(--chip-accent, var(--muted));
+  }
+
+  /* ── Role cycler ────────────────────────────────────────────────── */
+  .role-slot {
+    position: relative;
+    display: inline-grid;
+    vertical-align: bottom;
+  }
+
+  /* Outgoing clears first, incoming follows. A straight crossfade showed both
+   * phrases at half opacity at the midpoint, which read as double vision
+   * because the words are different lengths. */
+  .role-item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(0.5em);
+    transition:
+      opacity 170ms ease-out,
+      transform 170ms ease-out;
+  }
+
+  .role-item[data-active="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) 170ms,
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1) 170ms;
+  }
+
+  .role-ghost {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* ── Magnetic ───────────────────────────────────────────────────── */
+  .magnetic {
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .magnetic:has(:focus-visible) {
+    transform: translate(0, 0) !important;
+  }
+
+  /* ── Timeline ───────────────────────────────────────────────────────
+   * A spine with nodes reads as a career, which stacked cards did not. The
+   * line is drawn on the list so it spans rows without per-row seams.
+   */
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      var(--line) 0%,
+      var(--line) 72%,
+      transparent 100%
+    );
+  }
+
+  .timeline-row {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline-node {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 11px;
+    height: 11px;
+    border-radius: var(--pill);
+    box-shadow: 0 0 0 4px var(--ink);
+  }
+
+  /* ── Contact email ──────────────────────────────────────────────── */
+  .mail-link {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4.2vw, 3.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    background-image: linear-gradient(var(--bone), var(--bone));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    transition: background-size 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    word-break: break-word;
+  }
+
+  .mail-link:hover,
+  .mail-link:focus-visible {
+    background-size: 100% 2px;
+  }
+
+  /* Pill — the shape both references lean on for badges and buttons. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--pill);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 0.5rem 0.95rem;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bone);
+    box-shadow: var(--shadow-card);
+  }
+
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--pill);
+    background: #2fbf6a;
+    box-shadow: 0 0 0 3px color-mix(in srgb, #2fbf6a 22%, transparent);
+  }
+
+  /* Serif italic accent — the Elian/Madison move: one phrase set against the
+   * bold sans so the headline has two voices instead of one. */
+  .t-accent {
+    font-family: var(--font-accent), ui-serif, Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* Media frame — radius 0 always; these are frames, not cards. */
+  .frame {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  /* Frames wake on hover. Restrained: a graded still should look graded,
+   * not filtered. */
+  .frame img {
+    transition:
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .frame:hover img {
+    transform: scale(1.03);
+    filter: saturate(1.1) brightness(1.05);
+  }
+
+  /* Section grounds. Accent-tinted variants stay world-specific:
+   * .ground-build only on engineering surfaces, .ground-watch only on
+   * editing surfaces. Defined after .panel so a panel can take a tint. */
+  .ground-alt {
+    background: var(--ink-raised);
+  }
+
+  .ground-build {
+    background:
+      radial-gradient(120% 85% at 50% 0%, var(--build-wash) 0%, transparent 62%),
+      var(--ink-raised);
+  }
+
+  .ground-watch {
+    background:
+      radial-gradient(120% 85% at 50% 0%, var(--watch-wash) 0%, transparent 62%),
+      var(--ink-raised);
+  }
+
+  /*
+   * Hero scrim. Layers 2 and 3 are the spec values. Layer 1 is the
+   * "deepen the scrim if it fails" allowance: measured against a
+   * pure-white worst-case frame the spec pair left the headline band at
+   * ~2.5:1. With layer 1 the headline band measures >= 3.2:1 and the body
+   * band >= 6:1.
+   */
+  /*
+   * Exactly the spec's two scrim layers. The extra darkening layer added
+   * earlier was sized for an arbitrary bright video frame; the hero is now a
+   * controlled image, so it is gone and the art reads through. Measured
+   * against the brightest pixel in the type band (58-100%): headline 14.7:1,
+   * body 6.8:1 — both well clear of 3:1 / 4.5:1.
+   */
+  .hero-scrim {
+    background-image:
+      radial-gradient(
+        120% 90% at 50% 40%,
+        transparent 40%,
+        rgba(8, 9, 11, 0.75) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(8, 9, 11, 0.62) 0%,
+        rgba(8, 9, 11, 0.3) 38%,
+        rgba(8, 9, 11, 0.97) 100%
+      );
+  }
+
+  /* CSS entrance for above-the-fold content. Runs without JS and always
+   * completes, so content can never be stranded invisible. */
+  .rise-in {
+    animation: rise-in var(--rise-duration, 0.7s)
+      cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0s) both;
+  }
+
+  .hero-rise {
+    animation: hero-rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+}
+
+@layer utilities {
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+
+  .shell {
+    margin-inline: auto;
+    max-width: var(--shell-max);
+  }
+
+  .rule-grow {
+    position: relative;
+  }
+
+  .rule-grow::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.08em;
+    height: 1px;
+    width: 0;
+    background: currentColor;
+    transition: width 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .rule-grow:hover::after,
+  .rule-grow:focus-visible::after {
+    width: 100%;
+  }
+}
+
+/* Signature playhead cursor replaces the pointer over media only. */
+@media (pointer: fine) {
+  [data-playhead] {
+    cursor: none;
+  }
+}
+
+@keyframes sheet-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(-14px, -22px, 0); }
+}
+
+@keyframes chip-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-11px) rotate(-1.1deg); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes cue {
+  0%       { transform: translateY(-100%); }
+  60%,100% { transform: translateY(100%); }
+}
+
+@keyframes idle-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-7px) scale(1.006); }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--rise-x, 0), var(--rise-y, 24px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .rule-grow::after {
+    transition: none !important;
+  }
+
+  .frame:hover img {
+    transform: none;
+  }
 }

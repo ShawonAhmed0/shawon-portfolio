@@ -1,0 +1,28 @@
+export type Service = { name: string; description: string };
+
+export const services: Service[] = [
+  {
+    name: "UGC Ads",
+    description:
+      "Raw, native-looking content designed for TikTok, Instagram, and Meta.",
+  },
+  {
+    name: "Meta Ads",
+    description:
+      "Performance-focused creatives built around hooks, benefits, objections, and clear messaging.",
+  },
+  {
+    name: "VSL Editing",
+    description:
+      "Long-form direct-response editing with engaging visuals, pacing, graphics, and B-roll.",
+  },
+  {
+    name: "Short-Form Content",
+    description: "TikTok, Reels, and YouTube Shorts optimized for retention.",
+  },
+  {
+    name: "AI Creative Production",
+    description:
+      "commercial visuals using Grok Imagine, Kling, Google Flow, Veo, Midjourney, Flux, ElevenLabs.",
+  },
+];

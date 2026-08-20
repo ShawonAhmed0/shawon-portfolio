@@ -1,0 +1,15 @@
+{
+  "mcp": {
+    "code-review-graph": {
+      "type": "local",
+      "command": [
+        "/usr/local/bin/python3",
+        "-m",
+        "code_review_graph",
+        "serve",
+        "--repo",
+        "/Users/shawon/Documents/shawon-portfolio"
+      ]
+    }
+  }
+}
