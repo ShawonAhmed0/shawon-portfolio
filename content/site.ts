@@ -193,12 +193,22 @@ export const contact = {
     href: "mailto:shawona145@gmail.com",
   },
   socials: [
-    { label: "GITHUB", href: "#" },
-    { label: "LINKEDIN", href: "#" },
-    { label: "YOUTUBE", href: "#" },
-    { label: "EMAIL", href: "mailto:shawona145@gmail.com" },
+    {
+      label: "GitHub",
+      href: "https://github.com/ShawonAhmed0",
+      external: true,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://linkedin.com/in/shawonahmedsa",
+      external: true,
+    },
+    {
+      label: "Email",
+      href: "mailto:shawona145@gmail.com",
+      external: false,
+    },
   ],
-  socialsNote: "TODO: GitHub, LinkedIn and YouTube URLs",
   footerLeft: "SHAWON © 2026",
   footerRight: "BUILT WITH NEXT.JS",
 };

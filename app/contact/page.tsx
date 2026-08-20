@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
@@ -37,19 +38,25 @@ export default function ContactPage() {
               {contact.email.label}
             </Link>
 
-            <ul className="mt-10 flex flex-wrap gap-7">
+            <ul className="mt-10 flex flex-wrap gap-3">
               {contact.socials.map((social) => (
                 <li key={social.label}>
                   <Link
                     href={social.href}
-                    className="t-label transition-colors duration-200 hover:text-[var(--bone)]"
+                    {...(social.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    className="inline-flex items-center gap-2 rounded-[var(--pill)] border border-[var(--line)] px-4 py-2 text-[13px] font-medium transition-colors duration-200 hover:border-[var(--bone)]"
+                    style={{ background: "var(--surface)", color: "var(--bone)" }}
                   >
                     {social.label}
+                    {social.external ? (
+                      <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden />
+                    ) : null}
                   </Link>
                 </li>
               ))}
             </ul>
-            <p className="t-label mt-4">{contact.socialsNote}</p>
           </FadeIn>
 
           <div className="mt-20 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--line)] pt-8">
