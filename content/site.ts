@@ -30,11 +30,11 @@ export const portrait = {
 };
 
 export const navLinks: NavLink[] = [
-  { label: "WORK", href: "/#work" },
-  { label: "SOFTWARE", href: "/software" },
-  { label: "EDITING", href: "/editing" },
-  { label: "ABOUT", href: "/about" },
-  { label: "CONTACT", href: "/contact" },
+  { label: "Work", href: "/#work" },
+  { label: "Software", href: "/software" },
+  { label: "Creative", href: "/editing" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const fork = {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { varRgb } from "@/lib/cssColor";
 
 type Preset = { name: string; p: [number, number, number, number] };
 
@@ -40,6 +41,10 @@ export default function BezierGraph({ className }: { className?: string }) {
     // Measured via ResizeObserver, not a one-shot on mount: this element is
     // breakpoint-gated, so it can mount at display:none (zero box) and only
     // later gain a size. A single measurement leaves the canvas 0x0 forever.
+    const accent = varRgb("--watch", "180,98,42");
+    const curve = varRgb("--build", "31,111,74");
+    const ink = varRgb("--bone", "16,22,15");
+
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       const r = canvas.getBoundingClientRect();
@@ -82,7 +87,7 @@ export default function BezierGraph({ className }: { className?: string }) {
       const Y = (v: number) => gy + (1 - v) * gh;
 
       // frame
-      ctx.strokeStyle = "rgba(22,19,15,0.10)";
+      ctx.strokeStyle = `rgba(${ink},0.12)`;
       ctx.lineWidth = 1 * dpr;
       ctx.strokeRect(gx, gy, gw, gh);
 
@@ -91,12 +96,12 @@ export default function BezierGraph({ className }: { className?: string }) {
       ctx.setLineDash([3 * dpr, 4 * dpr]);
       ctx.moveTo(X(0), Y(0));
       ctx.lineTo(X(1), Y(1));
-      ctx.strokeStyle = "rgba(22,19,15,0.13)";
+      ctx.strokeStyle = `rgba(${ink},0.15)`;
       ctx.stroke();
       ctx.setLineDash([]);
 
       // handles
-      ctx.strokeStyle = "rgba(224,122,36,0.34)";
+      ctx.strokeStyle = `rgba(${accent},0.38)`;
       ctx.beginPath();
       ctx.moveTo(X(0), Y(0));
       ctx.lineTo(X(c[0]), Y(c[1]));
@@ -108,7 +113,7 @@ export default function BezierGraph({ className }: { className?: string }) {
       ctx.beginPath();
       ctx.moveTo(X(0), Y(0));
       ctx.bezierCurveTo(X(c[0]), Y(c[1]), X(c[2]), Y(c[3]), X(1), Y(1));
-      ctx.strokeStyle = "rgba(47,91,215,0.55)";
+      ctx.strokeStyle = `rgba(${curve},0.6)`;
       ctx.lineWidth = 1.6 * dpr;
       ctx.stroke();
 
@@ -119,14 +124,14 @@ export default function BezierGraph({ className }: { className?: string }) {
         ctx.fillStyle = fill;
         ctx.fill();
       };
-      dot(c[0], c[1], "rgba(224,122,36,0.75)");
-      dot(c[2], c[3], "rgba(224,122,36,0.75)");
-      dot(0, 0, "rgba(22,19,15,0.35)");
-      dot(1, 1, "rgba(22,19,15,0.35)");
+      dot(c[0], c[1], `rgba(${accent},0.78)`);
+      dot(c[2], c[3], `rgba(${accent},0.78)`);
+      dot(0, 0, `rgba(${ink},0.35)`);
+      dot(1, 1, `rgba(${ink},0.35)`);
 
       // readout — the actual CSS you would paste
       ctx.font = `${10 * dpr}px ui-monospace, "JetBrains Mono", monospace`;
-      ctx.fillStyle = "rgba(22,19,15,0.34)";
+      ctx.fillStyle = `rgba(${ink},0.36)`;
       ctx.fillText(
         `cubic-bezier(${c.map((v) => v.toFixed(2)).join(", ")})`,
         gx,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { varRgb } from "@/lib/cssColor";
 
 const BAR_W = 3;
 const GAP = 4;
@@ -33,6 +34,8 @@ export default function WaveformRibbon() {
     let frame: number | null = null;
     let w = 0, h = 0, dpr = 1;
     let running = true;
+
+    const ink = varRgb("--watch", "180,98,42");
 
     let lastY = window.scrollY;
     let boost = 0;
@@ -75,7 +78,7 @@ export default function WaveformRibbon() {
         const alpha = 0.42 * Math.max(0, edge);
         if (alpha <= 0.001) continue;
 
-        ctx.fillStyle = `rgba(224,122,36,${alpha.toFixed(3)})`;
+        ctx.fillStyle = `rgba(${ink},${alpha.toFixed(3)})`;
         ctx.fillRect(x, mid - half, BAR_W * dpr, half * 2);
       }
     };

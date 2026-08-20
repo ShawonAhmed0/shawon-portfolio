@@ -54,20 +54,21 @@ export default function SiteNav() {
         <Link
           href="/"
           className="t-h3 shrink-0 leading-none text-[var(--bone)] transition-opacity duration-200 hover:opacity-70"
-          style={{ fontSize: "1.125rem", letterSpacing: "-0.02em", fontWeight: 700 }}
+          style={{ fontSize: "1.15rem", letterSpacing: "-0.028em", fontWeight: 800 }}
         >
           {site.mark}
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-7 md:flex">
           {navLinks.slice(0, -1).map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="text-[13px] font-medium tracking-[0.01em] transition-colors duration-200"
-              style={{ color: isActive(link.href) ? "var(--bone)" : "var(--muted)" }}
+              aria-current={isActive(link.href) ? "page" : undefined}
+              className="nav-link text-[14px] font-medium tracking-[-0.005em] transition-colors duration-200"
+              data-active={isActive(link.href)}
             >
-              {link.label.charAt(0) + link.label.slice(1).toLowerCase()}
+              {link.label}
             </Link>
           ))}
           <Link
@@ -105,7 +106,7 @@ export default function SiteNav() {
                     onClick={() => setOpen(false)}
                     className="t-h3 text-[var(--bone)]"
                   >
-                    {link.label.charAt(0) + link.label.slice(1).toLowerCase()}
+                    {link.label}
                   </Link>
                 ))}
                 <button

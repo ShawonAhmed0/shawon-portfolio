@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { varRgb } from "@/lib/cssColor";
 
 type Bloom = {
   rgb: string;
@@ -14,14 +15,16 @@ type Bloom = {
 
 /* Soft pastel blooms on warm paper. On a light ground these composite
    normally — additive blending would just wash everything to white. */
-const BLOOMS: Bloom[] = [
-  { rgb: "255,203,140", x: 0.62, y: 0.30, ax: 0.09, ay: 0.06, sx: 0.020, sy: 0.016, ph: 0.0, r: 0.62, a: 0.85 },
-  { rgb: "255,178,168", x: 0.80, y: 0.60, ax: 0.07, ay: 0.06, sx: 0.015, sy: 0.023, ph: 1.7, r: 0.52, a: 0.62 },
-  { rgb: "198,215,255", x: 0.40, y: 0.72, ax: 0.08, ay: 0.05, sx: 0.018, sy: 0.013, ph: 3.1, r: 0.55, a: 0.55 },
-  { rgb: "255,232,190", x: 0.22, y: 0.24, ax: 0.06, ay: 0.05, sx: 0.013, sy: 0.019, ph: 4.6, r: 0.48, a: 0.50 },
+const BLOOMS: Omit<Bloom, "rgb">[] = [
+  { x: 0.62, y: 0.30, ax: 0.09, ay: 0.06, sx: 0.020, sy: 0.016, ph: 0.0, r: 0.62, a: 0.85 },
+  { x: 0.80, y: 0.60, ax: 0.07, ay: 0.06, sx: 0.015, sy: 0.023, ph: 1.7, r: 0.52, a: 0.62 },
+  { x: 0.40, y: 0.72, ax: 0.08, ay: 0.05, sx: 0.018, sy: 0.013, ph: 3.1, r: 0.55, a: 0.55 },
+  { x: 0.22, y: 0.24, ax: 0.06, ay: 0.05, sx: 0.013, sy: 0.019, ph: 4.6, r: 0.48, a: 0.50 },
 ];
 
-const PAPER = "#faf7f2";
+/** Token names feeding each bloom, resolved at runtime. */
+const BLOOM_TOKENS = ["--bloom-1", "--bloom-2", "--bloom-3", "--bloom-1"];
+
 const SPARKS = 34;
 
 export default function HeroCanvas() {
@@ -56,6 +59,15 @@ export default function HeroCanvas() {
       sp: 0.5 + Math.random() * 1.1,
     }));
 
+    // Resolved once per mount from :root, so the palette has one home.
+    const paper = varRgb("--ink", "246,248,245");
+    const blooms = BLOOMS.map((b, i) => ({
+      ...b,
+      rgb: varRgb(BLOOM_TOKENS[i], "207,230,207"),
+    }));
+    const spark = varRgb("--watch", "160,86,35");
+    const ground = varRgb("--portrait-ground", "244,240,233");
+
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cssW = canvas.clientWidth || window.innerWidth;
@@ -70,10 +82,10 @@ export default function HeroCanvas() {
       const diag = Math.hypot(w, h);
       cur.x += (target.x - cur.x) * 0.045;
       cur.y += (target.y - cur.y) * 0.045;
-      ctx.fillStyle = PAPER;
+      ctx.fillStyle = `rgb(${paper})`;
       ctx.fillRect(0, 0, w, h);
 
-      for (const b of BLOOMS) {
+      for (const b of blooms) {
         // Nearer blooms react more, which reads as depth.
         const pull = 0.06 + b.r * 0.09;
         const cx = (b.x + Math.sin(t * b.sx + b.ph) * b.ax + cur.x * pull) * w;
@@ -87,18 +99,18 @@ export default function HeroCanvas() {
         ctx.fillRect(0, 0, w, h);
       }
 
-      // Flatten the field where the portrait sits. The clip was shot on a
-      // cream ground (#f0ece2); against a bright bloom that reads as a
-      // rectangle. mix-blend-mode cannot fix it here because the parallax
-      // wrapper's transform creates a stacking context and isolates the blend,
-      // so instead the backdrop is brought back to near-flat paper there.
+      // Pool of the clip's own backdrop colour where the portrait sits, so the
+      // rectangle has nothing to contrast against. Painting --ink here instead
+      // only works when the page ground happens to match the footage; it does
+      // not, so this uses --portrait-ground and fades out to the page.
       const px = 0.78 * w;
       const py = 0.46 * h;
-      const pr = 0.46 * diag * 0.5;
+      const pr = 0.62 * diag * 0.5;
       const wash = ctx.createRadialGradient(px, py, 0, px, py, pr);
-      wash.addColorStop(0, "rgba(250,247,242,0.92)");
-      wash.addColorStop(0.55, "rgba(250,247,242,0.66)");
-      wash.addColorStop(1, "rgba(250,247,242,0)");
+      wash.addColorStop(0, `rgba(${ground},1)`);
+      wash.addColorStop(0.42, `rgba(${ground},1)`);
+      wash.addColorStop(0.68, `rgba(${ground},0.82)`);
+      wash.addColorStop(1, `rgba(${ground},0)`);
       ctx.fillStyle = wash;
       ctx.fillRect(0, 0, w, h);
 
@@ -106,7 +118,7 @@ export default function HeroCanvas() {
         const yy = (((p.y - t * p.vy) % 1) + 1) % 1;
         const xx = (((p.x + t * p.vx) % 1) + 1) % 1;
         const tw = 0.34 + 0.66 * (0.5 + 0.5 * Math.sin(t * p.sp + p.ph));
-        ctx.fillStyle = `rgba(196,142,84,${(0.30 * tw).toFixed(3)})`;
+        ctx.fillStyle = `rgba(${spark},${(0.30 * tw).toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(xx * w, yy * h, p.r * (w / 1400) * 1.7, 0, Math.PI * 2);
         ctx.fill();
@@ -114,8 +126,8 @@ export default function HeroCanvas() {
 
       // Fade back to paper at the edges so the section has no hard seam.
       const fade = ctx.createLinearGradient(0, h * 0.52, 0, h);
-      fade.addColorStop(0, "rgba(250,247,242,0)");
-      fade.addColorStop(1, "rgba(250,247,242,1)");
+      fade.addColorStop(0, `rgba(${paper},0)`);
+      fade.addColorStop(1, `rgba(${paper},1)`);
       ctx.fillStyle = fade;
       ctx.fillRect(0, 0, w, h);
     };

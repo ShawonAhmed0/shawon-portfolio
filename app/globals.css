@@ -9,31 +9,49 @@
  * flipping the site from the old near-black world happens here rather than
  * in the components.
  * ────────────────────────────────────────────────────────────────────── */
+/* ──────────────────────────────────────────────────────────────────────
+ * Cool sage system.
+ *
+ * The previous palette was warm peach. This one runs cool and green for a
+ * concrete reason: the portrait clip is a dark green sweater against cream.
+ * A green-family accent ties the subject to the page instead of leaving him
+ * as the one green object in a warm frame. The greens here are deliberately
+ * desaturated — sage and eucalyptus, not the acid green of the reference,
+ * which would fight a photographic subject.
+ * ────────────────────────────────────────────────────────────────────── */
 :root {
-  /* Grounds — warm paper, not clinical white */
-  --ink: #faf7f2;          /* page */
-  --ink-raised: #f4efe7;   /* alternating band */
-  --surface: #ffffff;      /* cards */
-  --surface-2: #f6f2ec;    /* wells, chips */
+  /* Grounds — cool paper with a faint green cast */
+  --ink: #f6f8f5;
+  --ink-raised: #eef2ec;
+  --surface: #ffffff;
+  --surface-2: #eff3ee;
 
   /* Hairlines */
-  --line: #e4ddd2;
-  --line-soft: #efe9e0;
+  --line: #dbe3d9;
+  --line-soft: #e9efe7;
 
-  /* Type */
-  --bone: #16130f;   /* primary — warm near-black */
-  --muted: #6d6559;  /* secondary */
-  --faint: #9c948a;  /* tertiary */
+  /* Type — near-black carrying the same green undertone */
+  --bone: #10160f;
+  --muted: #5f6b60;
+  --faint: #939e94;
 
-  /* Accents. The portrait is rim-lit warm amber, so the hero bloom is built
-   * from that family; the cool tone carries the engineering surfaces. */
-  --build: #2f5bd7;
-  --watch: #e07a24;
+  /* Accents */
+  --build: #1f6f4a; /* engineering — deep eucalyptus */
+  --watch: #a05623; /* editing — burnt sienna. Measured: 5.45:1 on white,
+                       4.86:1 on --surface-2, 5.11:1 on --ink. #b4622a read
+                       nicer but only hit 4.45:1, failing 12px stack lines. */
+
+  /* The portrait clip was shot on a warm cream backdrop, measured from the
+   * decoded frames at #edeae1 (corners) to #f6f2ec (middle). The page ground
+   * is cool sage, so the canvas paints this warm pool behind the portrait and
+   * fades it out — the clip matches its immediate surroundings and the
+   * surroundings match the page. Retune this if the clip is ever replaced. */
+  --portrait-ground: #f4f0e9;
 
   /* Hero bloom stops */
-  --bloom-1: #ffd7a1;
-  --bloom-2: #ffc4c0;
-  --bloom-3: #d6e2ff;
+  --bloom-1: #cfe6cf;
+  --bloom-2: #e6efd2;
+  --bloom-3: #cfe0e8;
 
   --r: 4px;
   --pill: 999px;
@@ -47,12 +65,12 @@
   --build-glow: radial-gradient(90% 70% at 30% 100%, var(--build) 0%, transparent 70%);
   --watch-glow: radial-gradient(90% 70% at 30% 100%, var(--watch) 0%, transparent 70%);
 
-  --ambient-1: #fdf6ea;
-  --ambient-2: #f3f0fb;
+  --ambient-1: #f0f6ec;
+  --ambient-2: #eef3f4;
 
   --lift: color-mix(in srgb, #ffffff 70%, transparent);
-  --shadow-panel: 0 18px 44px -28px rgb(40 30 20 / 0.28);
-  --shadow-card: 0 2px 4px rgb(40 30 20 / 0.04), 0 12px 32px -12px rgb(40 30 20 / 0.10);
+  --shadow-panel: 0 18px 44px -28px rgb(24 38 28 / 0.26);
+  --shadow-card: 0 2px 4px rgb(24 38 28 / 0.04), 0 12px 32px -12px rgb(24 38 28 / 0.10);
 }
 
 @layer base {
@@ -496,6 +514,111 @@
     background-size: 100% 2px;
   }
 
+  /* Nav links: an underline that grows from the left, so the active page and
+   * hover both read structurally rather than as a faint colour shift. */
+  .nav-link {
+    position: relative;
+    color: var(--muted);
+    padding-block: 2px;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1.5px;
+    width: 0;
+    background: var(--bone);
+    transition: width 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link[data-active="true"] {
+    color: var(--bone);
+  }
+
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-link[data-active="true"]::after {
+    width: 100%;
+  }
+
+  /* ── Opening titles ────────────────────────────────────────────────
+   * Total run ~2.3s: letters in (0.18-1.0s), hold, then the two panels part
+   * (1.55-2.3s). Everything is `both` fill so the end state sticks.
+   */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    animation: intro-clear 0.01s linear 2.35s both;
+  }
+
+  .intro-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 50.5%;
+    background: var(--ink);
+  }
+
+  .intro-panel-top {
+    top: 0;
+    animation: intro-part-up 0.85s cubic-bezier(0.76, 0, 0.24, 1) 1.5s both;
+  }
+
+  .intro-panel-bottom {
+    bottom: 0;
+    animation: intro-part-down 0.85s cubic-bezier(0.76, 0, 0.24, 1) 1.5s both;
+  }
+
+  .intro-name {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    letter-spacing: -0.035em;
+    color: var(--bone);
+    animation: intro-name-out 0.5s cubic-bezier(0.76, 0, 0.24, 1) 1.45s both;
+  }
+
+  .intro-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.5em);
+    animation: intro-letter-in 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Thin fill line beneath the name — reads as a render bar. */
+  .intro-bar {
+    position: absolute;
+    z-index: 1;
+    bottom: calc(50% - 3.2rem);
+    left: 50%;
+    height: 1.5px;
+    width: min(220px, 42vw);
+    translate: -50% 0;
+    background: color-mix(in srgb, var(--bone) 22%, transparent);
+    overflow: hidden;
+    animation: intro-name-out 0.4s ease 1.4s both;
+  }
+
+  .intro-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--watch);
+    transform-origin: left center;
+    animation: intro-bar-fill 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  }
+
   /* Pill — the shape both references lean on for badges and buttons. */
   .pill {
     display: inline-flex;
@@ -614,7 +737,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-
   .shell {
     margin-inline: auto;
     max-width: var(--shell-max);
@@ -646,6 +768,36 @@
   [data-playhead] {
     cursor: none;
   }
+}
+
+@keyframes intro-letter-in {
+  from { opacity: 0; transform: translateY(0.5em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes intro-bar-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes intro-name-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-0.35em); }
+}
+
+@keyframes intro-part-up {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
+}
+
+@keyframes intro-part-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+@keyframes intro-clear {
+  from { visibility: visible; }
+  to { visibility: hidden; }
 }
 
 @keyframes sheet-drift {
@@ -694,6 +846,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+
   *,
   *::before,
   *::after {

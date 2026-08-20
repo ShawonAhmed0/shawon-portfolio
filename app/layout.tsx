@@ -7,6 +7,7 @@ import {
   Noto_Sans_Bengali,
 } from "next/font/google";
 import "./globals.css";
+import IntroCurtain from "@/components/IntroCurtain";
 import ScrubBar from "@/components/ScrubBar";
 import PlayheadCursor from "@/components/PlayheadCursor";
 import { site } from "@/content/site";
@@ -70,6 +71,7 @@ export default function RootLayout({
       className={`${display.variable} ${accent.variable} ${body.variable} ${mono.variable} ${bengali.variable}`}
     >
       <body>
+        <IntroCurtain />
         {children}
         {/*
           soft-light, not overlay: against a near-black ground, overlay
