@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/components/ThemeToggle";
 import { navLinks, site } from "@/content/site";
 
 export default function SiteNav() {
@@ -71,6 +72,7 @@ export default function SiteNav() {
               {link.label}
             </Link>
           ))}
+          <ThemeToggle />
           <Link
             href="/contact"
             className="rounded-[var(--pill)] px-5 py-2.5 text-[13px] font-medium transition-opacity duration-200 hover:opacity-85"
@@ -80,17 +82,24 @@ export default function SiteNav() {
           </Link>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="site-menu"
-          aria-label={open ? "Close menu" : "Open menu"}
-          className="relative z-[45] -mr-2 flex flex-col gap-[5px] p-2 md:hidden"
-        >
-          <span aria-hidden className="block h-px w-5 bg-[var(--bone)]" />
-          <span aria-hidden className="block h-px w-5 bg-[var(--bone)]" />
-        </button>
+        {/* Phone bar. The toggle sits out here rather than only inside the
+            menu — a theme switch buried behind a hamburger is a theme switch
+            nobody finds. The copy inside the menu stays for when the overlay
+            is covering this one. */}
+        <div className="flex items-center gap-1 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="site-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="relative z-[45] -mr-2 flex flex-col gap-[5px] p-2"
+          >
+            <span aria-hidden className="block h-px w-5 bg-[var(--bone)]" />
+            <span aria-hidden className="block h-px w-5 bg-[var(--bone)]" />
+          </button>
+        </div>
 
         {mounted && open
           ? createPortal(
@@ -109,13 +118,16 @@ export default function SiteNav() {
                     {link.label}
                   </Link>
                 ))}
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="t-label mt-4 self-start"
-                >
-                  CLOSE
-                </button>
+                <div className="mt-4 flex items-center gap-4">
+                  <ThemeToggle />
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="t-label"
+                  >
+                    CLOSE
+                  </button>
+                </div>
               </div>,
               document.body,
             )

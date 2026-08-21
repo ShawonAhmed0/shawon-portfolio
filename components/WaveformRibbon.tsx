@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { varRgb } from "@/lib/cssColor";
+import { createPalette } from "@/lib/cssColor";
+import { THEME_SHIFT_MS } from "@/lib/theme";
 
 const BAR_W = 3;
 const GAP = 4;
@@ -35,7 +36,16 @@ export default function WaveformRibbon() {
     let w = 0, h = 0, dpr = 1;
     let running = true;
 
-    const ink = varRgb("--watch", "180,98,42");
+    // Eased, not re-read on the spot — see createPalette.
+    const palette = createPalette(
+      { ink: { var: "--watch", fallback: "160,86,35" } },
+      {
+        duration: THEME_SHIFT_MS,
+        onChange: () => {
+          if (reduce.matches) draw(0); // static frame needs an explicit repaint
+        },
+      },
+    );
 
     let lastY = window.scrollY;
     let boost = 0;
@@ -50,6 +60,7 @@ export default function WaveformRibbon() {
     };
 
     const draw = (t: number) => {
+      const { ink } = palette.frame();
       ctx.clearRect(0, 0, w, h);
 
       const mid = h / 2;
@@ -139,6 +150,7 @@ export default function WaveformRibbon() {
 
     return () => {
       stop();
+      palette.dispose();
       io.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

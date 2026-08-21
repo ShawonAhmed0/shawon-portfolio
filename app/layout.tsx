@@ -57,7 +57,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08090B",
+  /* Mobile browser chrome. Matches dark --ink, which is what the site ships
+     as; #08090B was left over from the original near-black design. */
+  themeColor: "#0e1210",
 };
 
 export default function RootLayout({
@@ -68,9 +70,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${display.variable} ${accent.variable} ${body.variable} ${mono.variable} ${bengali.variable}`}
     >
       <body>
+        <script
+          // Applies the stored theme before first paint. Reading this in React
+          // instead would render light markup and then repaint dark — a visible
+          // flash on every load for dark-mode users.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t}}catch(e){}",
+          }}
+        />
         <IntroCurtain />
         {children}
         {/*

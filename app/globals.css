@@ -10,16 +10,97 @@
  * in the components.
  * ────────────────────────────────────────────────────────────────────── */
 /* ──────────────────────────────────────────────────────────────────────
- * Cool sage system.
+ * Cool sage system, dark by default.
  *
- * The previous palette was warm peach. This one runs cool and green for a
- * concrete reason: the portrait clip is a dark green sweater against cream.
- * A green-family accent ties the subject to the page instead of leaving him
- * as the one green object in a warm frame. The greens here are deliberately
- * desaturated — sage and eucalyptus, not the acid green of the reference,
- * which would fight a photographic subject.
+ * The site ships dark: :root carries the dark values and a light choice has
+ * to be asked for. prefers-color-scheme is deliberately NOT consulted — a
+ * visitor on a light-preferring OS still lands on dark, because dark is the
+ * design rather than a preference to be negotiated. That also collapses what
+ * used to be three token blocks into two, and the duplication with it.
+ *
+ * The palette runs cool and green so a green-family accent ties the subject to
+ * the page rather than leaving him as the one green object in a warm frame.
+ * The light portrait is a sage knit, which the accents were chosen against;
+ * the dark cut is black, where the greens carry the page on their own.
+ * The greens are deliberately desaturated — sage and eucalyptus, not the acid
+ * green of the reference, which would fight a photographic subject.
  * ────────────────────────────────────────────────────────────────────── */
 :root {
+  /* Tells the UA to render native scrollbars, form controls and the canvas
+     behind the page in the matching scheme. */
+  color-scheme: dark;
+
+  /* Grounds */
+  --ink: #0e1210;
+  --ink-raised: #131816;
+  --surface: #171c19;
+  --surface-2: #1e241f;
+
+  /* Hairlines */
+  --line: #2c332e;
+  --line-soft: #232a25;
+
+  /* Type */
+  --bone: #edf2ee;
+  --muted: #97a49a;
+  --faint: #6c7770;
+
+  /* Accents. Measured on this ground: build 9.69:1 on --ink and 8.86:1 on
+     --surface, watch 7.87:1 on --ink and 6.59:1 on --surface-2. */
+  --build: #5fce9a;
+  --watch: #e8935a;
+
+  /* Hero bloom stops — same hues as light, dropped to sit on a dark ground */
+  --bloom-1: #1d3b2c;
+  --bloom-2: #2a3a24;
+  --bloom-3: #1f3340;
+
+  --ambient-1: #121a15;
+  --ambient-2: #131a1c;
+
+  --lift: color-mix(in srgb, #ffffff 8%, transparent);
+  --shadow-panel: 0 18px 44px -28px rgb(0 0 0 / 0.7);
+  --shadow-card: 0 2px 4px rgb(0 0 0 / 0.28), 0 12px 32px -12px rgb(0 0 0 / 0.5);
+
+  /* The dark cut is a black turtleneck, which would merge straight into --ink.
+     A small lift behind him separates the silhouette from the page without
+     reading as a panel. */
+  --portrait-ground: #1a231d;
+
+  /* ── Theme-independent ─────────────────────────────────────────────── */
+  /* Kept in sync with THEME_SHIFT_MS / HERO_SWAP_MS in lib/theme.ts. */
+  --theme-shift: 460ms;
+
+  /* Where the hero canvas puts the pool it paints under the portrait, as a
+     fraction of hero width. The portrait trades sides in light mode from md
+     up, so the pool has to follow it — see the light block and the media
+     query below. */
+  --pool-x: 0.78;
+
+  --r: 4px;
+  --pill: 999px;
+  --shell-max: 1440px; /* max content width; referenced by .shell */
+
+  /* Derived (aliases only). These stay here rather than being repeated per
+     theme: var() inside a custom property resolves against whichever value
+     wins on this same element, so they follow the active palette by
+     themselves. */
+  --build-wash: color-mix(in srgb, var(--build) 8%, transparent);
+  --watch-wash: color-mix(in srgb, var(--watch) 10%, transparent);
+  --build-line: color-mix(in srgb, var(--build) 34%, var(--line));
+  --watch-line: color-mix(in srgb, var(--watch) 34%, var(--line));
+  --build-glow: radial-gradient(90% 70% at 30% 100%, var(--build) 0%, transparent 70%);
+  --watch-glow: radial-gradient(90% 70% at 30% 100%, var(--watch) 0%, transparent 70%);
+}
+
+/* ── Light theme ──────────────────────────────────────────────────────
+ * Opt-in only. A blocking script in the layout stamps data-theme="light" on
+ * <html> before first paint when that is the stored choice, so this resolves
+ * on frame one and nothing flashes dark first.
+ * ─────────────────────────────────────────────────────────────────────── */
+:root[data-theme="light"] {
+  color-scheme: light;
+
   /* Grounds — cool paper with a faint green cast */
   --ink: #f6f8f5;
   --ink-raised: #eef2ec;
@@ -41,29 +122,10 @@
                        4.86:1 on --surface-2, 5.11:1 on --ink. #b4622a read
                        nicer but only hit 4.45:1, failing 12px stack lines. */
 
-  /* The portrait clip was shot on a warm cream backdrop, measured from the
-   * decoded frames at #edeae1 (corners) to #f6f2ec (middle). The page ground
-   * is cool sage, so the canvas paints this warm pool behind the portrait and
-   * fades it out — the clip matches its immediate surroundings and the
-   * surroundings match the page. Retune this if the clip is ever replaced. */
-  --portrait-ground: #f4f0e9;
-
   /* Hero bloom stops */
   --bloom-1: #cfe6cf;
   --bloom-2: #e6efd2;
   --bloom-3: #cfe0e8;
-
-  --r: 4px;
-  --pill: 999px;
-  --shell-max: 1440px; /* max content width; referenced by .shell */
-
-  /* Derived (aliases only) */
-  --build-wash: color-mix(in srgb, var(--build) 8%, transparent);
-  --watch-wash: color-mix(in srgb, var(--watch) 10%, transparent);
-  --build-line: color-mix(in srgb, var(--build) 34%, var(--line));
-  --watch-line: color-mix(in srgb, var(--watch) 34%, var(--line));
-  --build-glow: radial-gradient(90% 70% at 30% 100%, var(--build) 0%, transparent 70%);
-  --watch-glow: radial-gradient(90% 70% at 30% 100%, var(--watch) 0%, transparent 70%);
 
   --ambient-1: #f0f6ec;
   --ambient-2: #eef3f4;
@@ -71,11 +133,46 @@
   --lift: color-mix(in srgb, #ffffff 70%, transparent);
   --shadow-panel: 0 18px 44px -28px rgb(24 38 28 / 0.26);
   --shadow-card: 0 2px 4px rgb(24 38 28 / 0.04), 0 12px 32px -12px rgb(24 38 28 / 0.10);
+
+  /* A soft pool the hero canvas paints behind the portrait. It started as a
+     match for a video backdrop; with a true alpha cutout there is no rectangle
+     left to hide, so it now only warms the ground under the subject and gives
+     him something to stand on. Held just off --ink so it reads as light, not
+     as a shape. */
+  --portrait-ground: #f4f0e9;
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="light"] {
+    --pool-x: 0.24;
+  }
 }
 
 @layer base {
   html {
     background: var(--ink);
+  }
+
+  /* Theme change is a deliberate, user-initiated switch, so it dissolves
+     rather than cuts. The transition rides on a class that lib/theme.ts adds
+     for the length of the swap and then removes — left on permanently it
+     would put a 460ms lag on every hover on the site.
+     This lives in @layer base on purpose: any component or utility that
+     declares its own transition outranks it and keeps its own timing, which
+     is what those components want. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root.theme-shifting,
+    :root.theme-shifting *,
+    :root.theme-shifting *::before,
+    :root.theme-shifting *::after {
+      transition:
+        background-color var(--theme-shift) ease,
+        border-color var(--theme-shift) ease,
+        color var(--theme-shift) ease,
+        fill var(--theme-shift) ease,
+        stroke var(--theme-shift) ease,
+        box-shadow var(--theme-shift) ease;
+    }
   }
 
   body {
@@ -196,32 +293,133 @@
       0 26px 60px -22px rgb(40 30 20 / 0.20);
   }
 
-  /* Cutout portrait on paper. The echo still does the blending work, but at
-   * lower opacity — on a light ground a strong echo reads as a smudge. */
-  .portrait-wrap {
+  /* One frame per theme, both in the DOM, chosen by CSS. <html> carries its
+   * data-theme stamp before first paint, so this resolves on frame one — a JS
+   * swap would show a dark visitor the light cut until hydration. Follows the
+   * same default-dark rule as the tokens.
+   *
+   * The two are stacked in one grid cell rather than toggled with display, so
+   * the swap can cross-fade: display is not animatable, and a hard cut here
+   * is the most conspicuous thing on the page. They share a frame (900x1272)
+   * so stacking costs nothing in layout.
+   *
+   * visibility rides along on a delay so the outgoing frame stays in the
+   * accessibility tree for exactly as long as it is still visible, and the
+   * hidden one is never announced. */
+  .portrait-stack {
+    display: grid;
+    width: fit-content;
+  }
+
+  .portrait-frame {
     position: relative;
+    grid-area: 1 / 1;
+    width: fit-content;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--theme-shift) ease,
+      visibility 0s linear var(--theme-shift);
   }
 
-  .portrait-echo {
-    position: absolute;
-    inset: -6% -10% 4% -10%;
-    z-index: -1;
-    pointer-events: none;
-    filter: blur(40px) saturate(1.25);
-    opacity: 0.32;
-    transform: scale(1.05);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 94%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 94%);
+  .portrait-frame--dark,
+  :root[data-theme="light"] .portrait-frame--light {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--theme-shift) ease,
+      visibility 0s linear 0s;
   }
 
+  :root[data-theme="light"] .portrait-frame--dark {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--theme-shift) ease,
+      visibility 0s linear var(--theme-shift);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-frame {
+      transition: none;
+    }
+  }
+
+  /* ── Hero columns ───────────────────────────────────────────────────
+   * Light mode trades the sides from md up: portrait left, copy right. The
+   * end state is pure CSS so it is correct on first paint with no JS; the
+   * slide between the two states is HeroSwap's job.
+   *
+   * Placement is declared here rather than with Tailwind order/col utilities
+   * because those land in @layer utilities, which would outrank the light
+   * override no matter what it is written as. */
+  .hero-grid {
+    display: grid;
+    align-items: end;
+  }
+
+  .hero-figure {
+    order: 1;
+    justify-self: center;
+  }
+
+  .hero-copy {
+    order: 2;
+  }
+
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .hero-copy {
+      order: 1;
+    }
+
+    .hero-figure {
+      order: 2;
+      justify-self: end;
+    }
+
+    :root[data-theme="light"] .hero-grid {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    :root[data-theme="light"] .hero-copy {
+      order: 2;
+    }
+
+    :root[data-theme="light"] .hero-figure {
+      order: 1;
+      justify-self: start;
+    }
+  }
+
+  /* Both cuts run the subject to the bottom edge of the frame, so without a
+   * fade the crop shows as a straight horizontal cut.
+   *
+   * The two need different fades because the contrast against their ground is
+   * not comparable. On ink, black knitwear is already close to the page and a
+   * long dissolve from 68% is invisible as a gradient. On paper the same
+   * dissolve is plainly readable as a grey ramp eating half his torso, so the
+   * light frame holds full opacity far longer and gives up the last stretch
+   * quickly — short enough to keep him solid, long enough not to read as a
+   * cut. */
   .portrait-cutout {
     -webkit-mask-image: linear-gradient(
-      to bottom, #000 0%, #000 62%, rgba(0,0,0,0.85) 80%,
-      rgba(0,0,0,0.4) 92%, transparent 100%
+      to bottom, #000 0%, #000 68%, rgba(0,0,0,0.5) 88%, transparent 100%
     );
     mask-image: linear-gradient(
-      to bottom, #000 0%, #000 62%, rgba(0,0,0,0.85) 80%,
-      rgba(0,0,0,0.4) 92%, transparent 100%
+      to bottom, #000 0%, #000 68%, rgba(0,0,0,0.5) 88%, transparent 100%
+    );
+  }
+
+  :root[data-theme="light"] .portrait-cutout {
+    -webkit-mask-image: linear-gradient(
+      to bottom, #000 0%, #000 86%, rgba(0,0,0,0.6) 95%, transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom, #000 0%, #000 86%, rgba(0,0,0,0.6) 95%, transparent 100%
     );
   }
 
@@ -256,30 +454,6 @@
   .ghost-head > *:not(.ghost) {
     position: relative;
     z-index: 1;
-  }
-
-  /* Video portrait. Its cream backdrop already matches --ink, so only the
-   * edges need softening for it to read as part of the page rather than a
-   * video window sitting on top of it. */
-  .portrait-clip {
-    /* The canvas flattens to paper behind this element, so the clip's cream
-     * ground already matches and only the edges need dissolving. The mask must
-     * complete its fade INSIDE the box — sized over 100% it never reaches
-     * transparent at the corners and the rectangle stays visible. */
-    -webkit-mask-image: radial-gradient(
-      78% 86% at 50% 44%,
-      #000 34%,
-      rgba(0, 0, 0, 0.72) 62%,
-      rgba(0, 0, 0, 0.22) 84%,
-      transparent 97%
-    );
-    mask-image: radial-gradient(
-      78% 86% at 50% 44%,
-      #000 34%,
-      rgba(0, 0, 0, 0.72) 62%,
-      rgba(0, 0, 0, 0.22) 84%,
-      transparent 97%
-    );
   }
 
   /* Ticker. Translating -50% works because the track holds exactly two
@@ -364,10 +538,34 @@
   }
 
   /* ── Bezier graph ───────────────────────────────────────────────── */
+  /* Pinned to whichever corner sits under the portrait, so it changes side
+   * with the layout. Position is declared here rather than with Tailwind
+   * inset utilities, which land in @layer utilities and would outrank the
+   * light override.
+   *
+   * It cannot slide across the way the columns do: an absolutely positioned
+   * corner has no transform expressible without hard-coding the container
+   * width. So it steps aside for the swap and returns in its new corner. */
   .bezier-graph {
+    position: absolute;
+    bottom: 0;
+    right: 0;
     width: 150px;
     height: 120px;
     opacity: 0.85;
+    transition: opacity 300ms ease;
+  }
+
+  :root.theme-shifting .bezier-graph {
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  @media (min-width: 768px) {
+    :root[data-theme="light"] .bezier-graph {
+      right: auto;
+      left: 0;
+    }
   }
 
   /* ── Floating chips ─────────────────────────────────────────────────
@@ -619,6 +817,42 @@
     animation: intro-bar-fill 1.15s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
   }
 
+  /* ── Theme toggle ─────────────────────────────────────────────────── */
+  .theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--pill);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--bone);
+    transition:
+      border-color 200ms ease,
+      background 200ms ease;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--bone);
+  }
+
+  /* The control reads best at 38px, which is under the 44px a finger wants.
+     On touch the target is grown past the visual instead of the pill itself. */
+  @media (pointer: coarse) {
+    .theme-toggle::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+    }
+  }
+
+  .theme-toggle-icon {
+    display: inline-flex;
+    animation: theme-icon-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* Pill — the shape both references lean on for badges and buttons. */
   .pill {
     display: inline-flex;
@@ -768,6 +1002,11 @@
   [data-playhead] {
     cursor: none;
   }
+}
+
+@keyframes theme-icon-in {
+  from { opacity: 0; transform: rotate(-35deg) scale(0.8); }
+  to   { opacity: 1; transform: rotate(0) scale(1); }
 }
 
 @keyframes intro-letter-in {

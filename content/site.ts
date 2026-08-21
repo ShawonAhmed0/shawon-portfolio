@@ -20,11 +20,25 @@ export const site = {
   year: "2026",
 } as const;
 
+/**
+ * Two cutouts of the same head-and-shoulders setup, one per ground: sage knit
+ * lit bright for paper, black knit lit moody for ink. Same 900x1272 frame,
+ * which is what lets the hero box stay identical across a theme change and
+ * lets the two cross-fade in place.
+ *
+ * The light cut is REGISTERED to the dark one, not used as generated: as shot
+ * its face sat 22px right and 30px low at a 4.75% smaller scale, which the
+ * cross-fade showed as the head jumping and resizing. Correcting it lifted
+ * normalised cross-correlation over the face from 0.53 to 0.86 (residual: a
+ * 0.25% scale and 2px, roughly one screen pixel at render size). To redo it
+ * from a fresh source, solve for the transform again rather than reusing
+ * these numbers — they are specific to this pair.
+ */
 export const portrait = {
-  src: "/me/shawon-cutout.png",
-  /** Optional looping clip. Set to "/me/shawon-loop.mp4" once you have one. */
-  video: "/video/Shawon_vid.mp4" as string | null,
-  poster: "/me/shawon-poster.jpg",
+  /** Sage knit, lit for paper. */
+  src: "/me/shawon-light-v4.webp",
+  /** Lit for ink. */
+  srcDark: "/me/shawon-v3-dark.webp",
   alt: "Shawon",
   slate: "SUBJECT / SHAWON",
 };

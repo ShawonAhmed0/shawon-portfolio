@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
 import HeroPortrait from "@/components/HeroPortrait";
+import HeroSwap from "@/components/HeroSwap";
 import BezierGraph from "@/components/BezierGraph";
 import ContactSheet from "@/components/ContactSheet";
 import FloatingChips from "@/components/FloatingChips";
@@ -54,13 +55,14 @@ export default function Home() {
         <FloatingChips />
 
         <div className="shell relative z-10">
-          <BezierGraph className="bezier-graph pointer-events-none absolute bottom-0 right-0 z-[3] hidden lg:block" />
+          <BezierGraph className="bezier-graph pointer-events-none z-[3] hidden lg:block" />
 
-          {/* On mobile the portrait leads: source order puts the copy first, so
-              both columns are explicitly ordered and the override is dropped
-              from md up, where the two-column grid takes over. */}
-          <div className="grid items-end gap-10 md:mt-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-14">
-            <div className="order-2 md:order-1">
+          {/* Column placement lives in CSS (.hero-grid), not in utilities:
+              light mode mirrors the two from md up and a Tailwind order/col
+              utility would outrank that override. HeroSwap animates the
+              change; without JS the sides simply land correct. */}
+          <HeroSwap className="hero-grid gap-10 md:mt-8 md:gap-14">
+            <div className="hero-copy">
               <FadeIn delay={0.15} onMount className="mb-7">
                 <span className="pill">
                   <span aria-hidden className="pill-dot" />
@@ -116,12 +118,17 @@ export default function Home() {
               </FadeIn>
             </div>
 
-            <Parallax distance={-60} className="order-1 justify-self-center md:order-2 md:justify-self-end">
-              <FadeIn delay={0.35} y={16} onMount>
-                <HeroPortrait />
-              </FadeIn>
-            </Parallax>
-          </div>
+            {/* Plain wrapper on purpose: HeroSwap puts its flip transform on
+                the grid's direct children, and Parallax rewrites its own
+                transform on every scroll frame. */}
+            <div className="hero-figure">
+              <Parallax distance={-60}>
+                <FadeIn delay={0.35} y={16} onMount>
+                  <HeroPortrait />
+                </FadeIn>
+              </Parallax>
+            </div>
+          </HeroSwap>
 
         </div>
       </section>

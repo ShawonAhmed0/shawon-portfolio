@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { varRgb } from "@/lib/cssColor";
+import { createPalette } from "@/lib/cssColor";
+import { THEME_SHIFT_MS } from "@/lib/theme";
 
 type Preset = { name: string; p: [number, number, number, number] };
 
@@ -41,9 +42,20 @@ export default function BezierGraph({ className }: { className?: string }) {
     // Measured via ResizeObserver, not a one-shot on mount: this element is
     // breakpoint-gated, so it can mount at display:none (zero box) and only
     // later gain a size. A single measurement leaves the canvas 0x0 forever.
-    const accent = varRgb("--watch", "180,98,42");
-    const curve = varRgb("--build", "31,111,74");
-    const ink = varRgb("--bone", "16,22,15");
+    // Eased, not re-read on the spot — see createPalette.
+    const palette = createPalette(
+      {
+        accent: { var: "--watch", fallback: "160,86,35" },
+        curve: { var: "--build", fallback: "31,111,74" },
+        ink: { var: "--bone", fallback: "16,22,15" },
+      },
+      {
+        duration: THEME_SHIFT_MS,
+        onChange: () => {
+          if (reduce.matches) draw(0);
+        },
+      },
+    );
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -59,6 +71,7 @@ export default function BezierGraph({ className }: { className?: string }) {
     };
 
     const draw = (time: number) => {
+      const { accent, curve, ink } = palette.frame();
       const w = canvas.width;
       const h = canvas.height;
       if (w === 0 || h === 0) return;
@@ -177,6 +190,7 @@ export default function BezierGraph({ className }: { className?: string }) {
     document.addEventListener("visibilitychange", onVis);
     return () => {
       stop();
+      palette.dispose();
       io.disconnect();
       ro.disconnect();
       document.removeEventListener("visibilitychange", onVis);

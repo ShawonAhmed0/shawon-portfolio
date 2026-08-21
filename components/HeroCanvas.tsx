@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { varRgb } from "@/lib/cssColor";
+import { createPalette } from "@/lib/cssColor";
+import { THEME_SHIFT_MS } from "@/lib/theme";
 
 type Bloom = {
   rgb: string;
@@ -59,14 +60,29 @@ export default function HeroCanvas() {
       sp: 0.5 + Math.random() * 1.1,
     }));
 
-    // Resolved once per mount from :root, so the palette has one home.
-    const paper = varRgb("--ink", "246,248,245");
-    const blooms = BLOOMS.map((b, i) => ({
-      ...b,
-      rgb: varRgb(BLOOM_TOKENS[i], "207,230,207"),
-    }));
-    const spark = varRgb("--watch", "160,86,35");
-    const ground = varRgb("--portrait-ground", "244,240,233");
+    // Eased rather than re-read on the spot: the rest of the page dissolves
+    // between themes with a CSS transition and a canvas that snaps would be
+    // the one surface that cuts.
+    const palette = createPalette(
+      {
+        paper: { var: "--ink", fallback: "246,248,245" },
+        ground: { var: "--portrait-ground", fallback: "244,240,233" },
+        spark: { var: "--watch", fallback: "160,86,35" },
+        bloom0: { var: BLOOM_TOKENS[0], fallback: "207,230,207" },
+        bloom1: { var: BLOOM_TOKENS[1], fallback: "207,230,207" },
+        bloom2: { var: BLOOM_TOKENS[2], fallback: "207,230,207" },
+        bloom3: { var: BLOOM_TOKENS[3], fallback: "207,230,207" },
+        // Rides the same clock as the colours so the pool slides across with
+        // the portrait instead of jumping to the other side.
+        poolX: { var: "--pool-x", fallback: "0.78", scalar: true },
+      },
+      {
+        duration: THEME_SHIFT_MS,
+        onChange: () => {
+          if (reduce.matches) draw(0); // static frame needs a repaint
+        },
+      },
+    );
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -79,6 +95,15 @@ export default function HeroCanvas() {
     };
 
     const draw = (t: number) => {
+      const c = palette.frame();
+      const paper = c.paper;
+      const ground = c.ground;
+      const spark = c.spark;
+      const blooms = BLOOMS.map((b, i) => ({
+        ...b,
+        rgb: c[`bloom${i}` as "bloom0"],
+      }));
+
       const diag = Math.hypot(w, h);
       cur.x += (target.x - cur.x) * 0.045;
       cur.y += (target.y - cur.y) * 0.045;
@@ -99,11 +124,10 @@ export default function HeroCanvas() {
         ctx.fillRect(0, 0, w, h);
       }
 
-      // Pool of the clip's own backdrop colour where the portrait sits, so the
-      // rectangle has nothing to contrast against. Painting --ink here instead
-      // only works when the page ground happens to match the footage; it does
-      // not, so this uses --portrait-ground and fades out to the page.
-      const px = 0.78 * w;
+      // A pool of --portrait-ground under the subject, so he has something to
+      // stand on rather than floating on flat page colour. Its x follows the
+      // portrait, which trades sides in light mode.
+      const px = palette.value("poolX") * w;
       const py = 0.46 * h;
       const pr = 0.62 * diag * 0.5;
       const wash = ctx.createRadialGradient(px, py, 0, px, py, pr);
@@ -152,6 +176,10 @@ export default function HeroCanvas() {
 
     const onResize = () => {
       resize();
+      // --pool-x is breakpoint-gated, so crossing md moves the pool with no
+      // theme change to observe. Snap rather than slide: nothing here is a
+      // user-initiated switch.
+      palette.resync();
       if (reduce.matches) draw(0);
     };
     const onVisibility = () => {
@@ -194,6 +222,7 @@ export default function HeroCanvas() {
 
     return () => {
       stop();
+      palette.dispose();
       io.disconnect();
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("pointerleave", onLeave);
