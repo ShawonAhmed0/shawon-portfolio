@@ -25,6 +25,7 @@ export default function SoftwarePage() {
       {/* HERO — static, no video, --build accent */}
       <section
         data-timecode={MARK.hero.code}
+        data-timecode-label="SOFTWARE"
         className={`ground-build overflow-hidden pb-20 pt-10 md:pt-14 ${PAD}`}
       >
         <div className="shell w-full">
@@ -60,6 +61,7 @@ export default function SoftwarePage() {
       {/* ABOUT */}
       <section
         data-timecode={MARK.about.code}
+        data-timecode-label="ABOUT"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -86,6 +88,7 @@ export default function SoftwarePage() {
       {/* SKILLS */}
       <section
         data-timecode={MARK.skills.code}
+        data-timecode-label="STACK"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -108,7 +111,7 @@ export default function SoftwarePage() {
               <FadeIn
                 key={group.group}
                 delay={i * 0.06}
-                className="panel p-6 md:p-8"
+                className="panel tilt p-6 md:p-8"
               >
                 <p className="t-label" style={{ color: "var(--build)" }}>
                   {group.group}
@@ -133,6 +136,7 @@ export default function SoftwarePage() {
       {/* PROJECTS */}
       <section
         data-timecode={MARK.projects.code}
+        data-timecode-label="PROJECTS"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -156,7 +160,7 @@ export default function SoftwarePage() {
                 key={project.slug}
                 as="li"
                 delay={i * 0.06}
-                className="panel flex flex-col"
+                className="panel tilt flex flex-col"
               >
                 <div className="aspect-video w-full object-cover">
                   <img
@@ -208,6 +212,7 @@ export default function SoftwarePage() {
       {/* RESUME */}
       <section
         data-timecode={MARK.resume.code}
+        data-timecode-label="DOCUMENTS"
         className={`py-20 ${PAD}`}
       >
         <div className="shell">

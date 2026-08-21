@@ -27,6 +27,7 @@ export default function EditingPage() {
           no min-height, no mt-auto pin, so no dead band under the nav. */}
       <section
         data-timecode={MARK.hero.code}
+        data-timecode-label="CREATIVE"
         className={`relative overflow-hidden pb-24 pt-10 md:pb-32 md:pt-14 ${PAD}`}
       >
         <HeroCanvas />
@@ -68,6 +69,7 @@ export default function EditingPage() {
       {/* SHOWREEL */}
       <section
         data-timecode={MARK.showreel.code}
+        data-timecode-label="SHOWREEL"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -92,6 +94,7 @@ export default function EditingPage() {
       {/* WORK */}
       <section
         data-timecode={MARK.work.code}
+        data-timecode-label="SELECTED WORK"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -132,6 +135,7 @@ export default function EditingPage() {
       {/* SERVICES */}
       <section
         data-timecode={MARK.services.code}
+        data-timecode-label="SERVICES"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">
@@ -170,6 +174,7 @@ export default function EditingPage() {
       {/* EXPERIENCE */}
       <section
         data-timecode={MARK.experience.code}
+        data-timecode-label="TIMELINE"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">

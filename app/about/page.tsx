@@ -21,6 +21,7 @@ export default function AboutPage() {
 
       <section
         data-timecode={MARK.hero.code}
+        data-timecode-label="ABOUT"
         className={`pb-20 pt-20 md:pt-28 ${PAD}`}
       >
         <div className="shell">
@@ -51,6 +52,7 @@ export default function AboutPage() {
 
       <section
         data-timecode={MARK.experience.code}
+        data-timecode-label="TIMELINE"
         className={`py-20 md:py-28 ${PAD}`}
       >
         <div className="shell">

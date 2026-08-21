@@ -8,7 +8,11 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import IntroCurtain from "@/components/IntroCurtain";
-import ScrubBar from "@/components/ScrubBar";
+import GradeFilters from "@/components/GradeFilters";
+import GradePanel from "@/components/GradePanel";
+import Timeline from "@/components/Timeline";
+import Tilt from "@/components/Tilt";
+import RenderEgg from "@/components/RenderEgg";
 import PlayheadCursor from "@/components/PlayheadCursor";
 import { site } from "@/content/site";
 
@@ -84,7 +88,16 @@ export default function RootLayout({
           }}
         />
         <IntroCurtain />
-        {children}
+        <GradeFilters />
+
+        {/*
+          The grade stage. Only the page content sits inside it, for two
+          reasons: a `filter` makes an element the containing block for fixed
+          descendants, which would peel the timeline and cursor off the
+          viewport; and the chrome should stay neutral anyway, the way the UI
+          of a grading suite is never itself graded.
+        */}
+        <div className="grade-stage">{children}</div>
         {/*
           soft-light, not overlay: against a near-black ground, overlay
           multiplies the noise down to nothing. soft-light lifts it into
@@ -94,8 +107,11 @@ export default function RootLayout({
           aria-hidden
           className="grain pointer-events-none fixed inset-0 z-[60] opacity-[0.05] mix-blend-multiply"
         />
-        <ScrubBar />
+        <Timeline />
+        <Tilt />
+        <RenderEgg />
         <PlayheadCursor />
+        <GradePanel />
       </body>
     </html>
   );

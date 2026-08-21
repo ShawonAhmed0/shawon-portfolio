@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { createPalette } from "@/lib/cssColor";
+import { type HeroPost, createHeroPost } from "@/lib/heroPost";
 import { THEME_SHIFT_MS } from "@/lib/theme";
 
 type Bloom = {
@@ -34,8 +35,18 @@ export default function HeroCanvas() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: false });
+
+    // The field is painted into this buffer, never straight to the screen, so
+    // the shader has something to sample. Its resolution is capped lower than
+    // the display's: the field is all soft gradients, and the per-frame
+    // texture upload is the expensive part of the pass.
+    const source = document.createElement("canvas");
+    const ctx = source.getContext("2d", { alpha: false });
     if (!ctx) return;
+
+    const post: HeroPost | null = createHeroPost(canvas);
+    const blit = post ? null : canvas.getContext("2d", { alpha: false });
+    if (!post && !blit) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     const fine = window.matchMedia("(pointer: fine)");
@@ -79,7 +90,7 @@ export default function HeroCanvas() {
       {
         duration: THEME_SHIFT_MS,
         onChange: () => {
-          if (reduce.matches) draw(0); // static frame needs a repaint
+          if (reduce.matches) present(0); // static frame needs a repaint
         },
       },
     );
@@ -88,10 +99,18 @@ export default function HeroCanvas() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cssW = canvas.clientWidth || window.innerWidth;
       const cssH = canvas.clientHeight || window.innerHeight;
-      w = Math.min(Math.round(cssW * dpr), 1800);
+      // 1100 through the shader, 1800 without: grain and dispersion are
+      // computed per screen pixel, so the buffer only has to carry the
+      // gradients and can be cheaper than the surface it ends up on.
+      w = Math.min(Math.round(cssW * dpr), post ? 1100 : 1800);
       h = Math.round(w * (cssH / cssW));
-      canvas.width = w;
-      canvas.height = h;
+      source.width = w;
+      source.height = h;
+      if (post) post.resize(Math.min(Math.round(cssW * dpr), 1800), Math.round(Math.min(Math.round(cssW * dpr), 1800) * (cssH / cssW)));
+      else {
+        canvas.width = w;
+        canvas.height = h;
+      }
     };
 
     const draw = (t: number) => {
@@ -156,9 +175,33 @@ export default function HeroCanvas() {
       ctx.fillRect(0, 0, w, h);
     };
 
+    // Scroll velocity, normalised and decayed. Dispersion opens up while the
+    // page moves and closes as it settles, which is what makes the effect read
+    // as a lens reacting rather than as a static filter.
+    let vel = 0;
+    let lastY = window.scrollY;
+    const onScrollVel = () => {
+      const dy = Math.abs(window.scrollY - lastY);
+      lastY = window.scrollY;
+      vel = Math.min(1, vel + dy / 900);
+    };
+    window.addEventListener("scroll", onScrollVel, { passive: true });
+
+    const present = (t: number) => {
+      draw(t);
+      if (post) {
+        const light =
+          document.documentElement.dataset.theme === "light" ? 1 : 0;
+        post.render(source, t, vel, light);
+      } else if (blit) {
+        blit.drawImage(source, 0, 0);
+      }
+    };
+
     const loop = () => {
       if (!running) return;
-      draw(performance.now() / 1000);
+      vel *= 0.9;
+      present(performance.now() / 1000);
       frame = requestAnimationFrame(loop);
     };
     const start = () => {
@@ -171,7 +214,7 @@ export default function HeroCanvas() {
     };
 
     resize();
-    if (reduce.matches) draw(0);
+    if (reduce.matches) present(0);
     else start();
 
     const onResize = () => {
@@ -180,7 +223,7 @@ export default function HeroCanvas() {
       // theme change to observe. Snap rather than slide: nothing here is a
       // user-initiated switch.
       palette.resync();
-      if (reduce.matches) draw(0);
+      if (reduce.matches) present(0);
     };
     const onVisibility = () => {
       if (document.hidden) stop();
@@ -188,7 +231,7 @@ export default function HeroCanvas() {
     };
     const onMotionChange = () => {
       stop();
-      if (reduce.matches) draw(0);
+      if (reduce.matches) present(0);
       else start();
     };
 
@@ -222,6 +265,8 @@ export default function HeroCanvas() {
 
     return () => {
       stop();
+      window.removeEventListener("scroll", onScrollVel);
+      post?.dispose();
       palette.dispose();
       io.disconnect();
       window.removeEventListener("pointermove", onPointer);

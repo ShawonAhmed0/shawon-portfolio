@@ -1,3 +1,6 @@
+"use client";
+
+import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Accent, Project } from "@/content/projects";
@@ -14,32 +17,85 @@ type WorkCardProps = {
 };
 
 /**
- * Grid card. This replaced a sticky-stacking implementation built for the old
- * dark cinematic layout: four 88vh scroll-pinned panels made the work section
- * 5200px tall, more than half the page. A grid reads faster and matches the
- * reference language.
+ * Grid card whose cover scrubs like footage: the cursor's X position across
+ * the image picks the frame, and a filmstrip under it marks where you are.
+ *
+ * Each project already carries three frames, so this is real scrubbing
+ * through the actual media rather than a crossfade dressed up as one.
+ *
+ * Frames beyond the first stay unfetched until the pointer arrives. They are
+ * below the fold and most visitors never hover a given card, so loading all
+ * three per project up front would triple this section's image weight to show
+ * two thirds of it to nobody.
  */
 export default function WorkCard({ project, featured = false }: WorkCardProps) {
-  const [cover] = project.media;
+  const frames = project.media;
+  const [index, setIndex] = useState(0);
+  const [armed, setArmed] = useState(false);
+  const zoneRef = useRef<HTMLDivElement>(null);
+
+  const scrub = useCallback(
+    (clientX: number) => {
+      const el = zoneRef.current;
+      if (!el || frames.length < 2) return;
+      const rect = el.getBoundingClientRect();
+      const ratio = (clientX - rect.left) / rect.width;
+      const next = Math.floor(ratio * frames.length);
+      setIndex(Math.min(frames.length - 1, Math.max(0, next)));
+    },
+    [frames.length],
+  );
 
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className={`panel group flex flex-col overflow-hidden transition-transform duration-300 hover:-translate-y-1 ${
+      className={`panel tilt group flex flex-col overflow-hidden ${
         featured ? "md:col-span-2" : ""
       }`}
     >
-      <div className="overflow-hidden" style={{ background: "var(--surface-2)" }}>
-        <img
-          src={cover.src}
-          alt={cover.alt}
-          loading="lazy"
-          decoding="async"
-          {...(cover.playhead ? { "data-playhead": true } : {})}
-          className={`w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
-            featured ? "aspect-[21/9]" : "aspect-[4/3]"
-          }`}
-        />
+      <div
+        ref={zoneRef}
+        className="scrub-zone"
+        style={{ background: "var(--surface-2)" }}
+        onPointerEnter={(e) => {
+          if (e.pointerType !== "mouse") return;
+          setArmed(true);
+          scrub(e.clientX);
+        }}
+        onPointerMove={(e) => {
+          if (e.pointerType !== "mouse") return;
+          scrub(e.clientX);
+        }}
+        onPointerLeave={() => {
+          setArmed(false);
+          setIndex(0);
+        }}
+      >
+        {frames.map((frame, i) => (
+          <img
+            key={frame.src}
+            src={armed || i === 0 ? frame.src : undefined}
+            alt={i === 0 ? frame.alt : ""}
+            aria-hidden={i !== 0 || undefined}
+            loading="lazy"
+            decoding="async"
+            {...(frame.playhead ? { "data-playhead": true } : {})}
+            className={`scrub-frame ${featured ? "aspect-[21/9]" : "aspect-[4/3]"}`}
+            data-shown={i === index || undefined}
+          />
+        ))}
+
+        {frames.length > 1 ? (
+          <div aria-hidden className="scrub-strip" data-armed={armed || undefined}>
+            {frames.map((frame, i) => (
+              <span
+                key={frame.src}
+                className="scrub-tick"
+                data-on={i === index || undefined}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-6 md:p-7">

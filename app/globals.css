@@ -204,6 +204,57 @@
       var(--ink);
   }
 
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Browser surfaces. The caret, the scrollbar and the underline offset all
+     ship with defaults that belong to no design system; on a page this
+     committed they are the loudest remaining tell. */
+  html {
+    scrollbar-color: color-mix(in srgb, var(--bone) 22%, transparent)
+      transparent;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 99px;
+    background-clip: content-box;
+    background-color: color-mix(in srgb, var(--bone) 20%, transparent);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--bone) 38%, transparent);
+  }
+
+  input,
+  textarea {
+    caret-color: var(--watch);
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: from-font;
+  }
+
   ::selection {
     background: var(--bone);
     color: var(--ink);
@@ -462,6 +513,658 @@
     z-index: 1;
   }
 
+  /* ── Scrubbing cover ────────────────────────────────────────────────
+   * The cursor's X across the cover picks the frame. Frames are stacked in
+   * one grid cell so switching costs no layout, and only opacity changes.
+   */
+  .scrub-zone {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .scrub-frame {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 90ms linear, transform 500ms ease;
+  }
+
+  .scrub-frame[data-shown] {
+    opacity: 1;
+  }
+
+  .group:hover .scrub-frame[data-shown] {
+    transform: scale(1.03);
+  }
+
+  /* Filmstrip: one tick per frame, sitting on the cover's lower edge. It is
+     hidden until the pointer arrives, so a card at rest is just a picture. */
+  .scrub-strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 2px;
+    padding: 8px;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .scrub-strip[data-armed] {
+    opacity: 1;
+  }
+
+  .scrub-tick {
+    flex: 1;
+    height: 2px;
+    border-radius: 1px;
+    background: color-mix(in srgb, #ffffff 34%, transparent);
+    transition: background 140ms ease;
+  }
+
+  .scrub-tick[data-on] {
+    background: #ffffff;
+  }
+
+  /* ── Decode ─────────────────────────────────────────────────────────
+   * The scrambled layer is overlaid on the real text rather than replacing
+   * it, so the element never changes size mid-animation and the accessible
+   * string is always the finished one.
+   */
+  .decode-hidden {
+    visibility: hidden;
+  }
+
+  .decode-noise {
+    position: absolute;
+    inset: 0;
+    color: inherit;
+    pointer-events: none;
+    /* Proportional glyphs make the line breathe as characters swap; tabular
+       spacing holds it still. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  [data-decoding] {
+    position: relative;
+  }
+
+  /* ── Tilt ───────────────────────────────────────────────────────────
+   * Cursor-tracked depth on cards and panels. The rotation is driven by
+   * custom properties set from one shared pointer listener.
+   */
+  .tilt {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+    transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tilt[data-tilting] {
+    /* Follow the cursor closely while engaged, then ease back on release. */
+    transition: transform 90ms linear;
+  }
+
+  /* Glare rides above the card's own content but below its text, and only
+     exists while the pointer is on it. */
+  .tilt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      color-mix(in srgb, var(--bone) 14%, transparent) 0%,
+      transparent 55%
+    );
+    transition: opacity 300ms ease;
+  }
+
+  .tilt[data-tilting]::after {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt,
+    .tilt[data-tilting] {
+      transform: none;
+      transition: none;
+    }
+
+    .tilt::after {
+      display: none;
+    }
+  }
+
+  /* ── Render egg ─────────────────────────────────────────────────────
+   * The konami reward. Sits with the rest of the chrome, above the timeline
+   * and outside the grade stage — it is reporting on the grade, so it must
+   * not be wearing it.
+   */
+  .render-egg {
+    position: fixed;
+    left: 50%;
+    bottom: 66px;
+    z-index: 58;
+    transform: translateX(-50%);
+    min-width: 260px;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--ink-raised) 94%, transparent);
+    backdrop-filter: blur(18px);
+    box-shadow: var(--shadow-panel);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--bone);
+    animation: egg-in 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .render-egg-label,
+  .render-egg-done {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .render-egg-done {
+    justify-content: center;
+    color: var(--build);
+  }
+
+  .render-egg-done span {
+    color: var(--muted);
+  }
+
+  .render-egg-track {
+    display: block;
+    height: 2px;
+    margin-top: 0.55rem;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .render-egg-fill {
+    display: block;
+    height: 100%;
+    background: var(--watch);
+    transform-origin: 0 50%;
+    transition: transform 180ms linear;
+  }
+
+  /* ── Transport ──────────────────────────────────────────────────────
+   * The page as an edit timeline. Named `transport` rather than `timeline`
+   * because the experience list downpage already owns `.timeline`, and two
+   * rules under one name had each element wearing half of the other's.
+   *
+   * Clips at their real document positions: clips at their real document positions, a
+   * draggable playhead, J / L to shuttle. Chrome, so it stays outside
+   * .grade-stage and never carries the visitor's grade.
+   */
+  .transport {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    gap: 1.25rem;
+    height: 46px;
+    padding: 0 1.25rem;
+    border-top: 1px solid var(--line);
+    background: color-mix(in srgb, var(--ink) 84%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  @media (min-width: 640px) {
+    .transport {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .transport {
+      padding: 0 3rem;
+    }
+  }
+
+  .transport-readout {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    min-width: 200px;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  .transport-code {
+    color: var(--bone);
+    /* The readout changes on every scroll frame; proportional digits make it
+       shuffle sideways as the numbers tick. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .transport-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .transport-track {
+    position: relative;
+    flex: 1;
+    height: 18px;
+    cursor: ew-resize;
+    touch-action: none;
+  }
+
+  /* The empty track: gaps between clips are real gaps in the edit, not
+     padding, so the base rule is a hairline rather than a filled bar. */
+  .transport-track::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .transport-clip {
+    position: absolute;
+    top: 50%;
+    height: 7px;
+    transform: translateY(-50%);
+    border-radius: 1px;
+    background: color-mix(in srgb, var(--bone) 20%, transparent);
+    transition:
+      height 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      background 200ms ease;
+  }
+
+  .transport-clip:hover {
+    height: 13px;
+    background: color-mix(in srgb, var(--bone) 42%, transparent);
+  }
+
+  .transport-clip[data-active] {
+    height: 11px;
+    background: color-mix(in srgb, var(--watch) 68%, transparent);
+  }
+
+  .transport-head {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--bone);
+    pointer-events: none;
+    box-shadow: 0 0 0 0.5px color-mix(in srgb, var(--ink) 60%, transparent);
+  }
+
+  /* The playhead's tab: the shape that says "grab me" in every NLE. */
+  .transport-head::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    width: 7px;
+    height: 5px;
+    transform: translateX(-50%);
+    background: var(--bone);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  .transport[data-scrubbing] .transport-head,
+  .transport[data-scrubbing] .transport-head::before {
+    background: var(--watch);
+  }
+
+  .transport-track:focus-visible {
+    outline: 2px solid var(--bone);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .transport-meta {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .transport-meta {
+      display: none;
+    }
+  }
+
+  /* ── Grade panel ────────────────────────────────────────────────────
+   * A grading panel docked bottom-right, above the timeline. It is chrome,
+   * so it deliberately sits outside .grade-stage and stays ungraded — you
+   * cannot judge a look through the tool applying it.
+   */
+  .grade-stage {
+    filter: var(--grade-filter, none);
+  }
+
+  .grade-trigger {
+    position: fixed;
+    right: 20px;
+    /* Clears the timeline where there is one; sits on the edge where there
+       is not. The grade persists across visits, so this control has to be
+       reachable at every width the grade applies at — hiding it on phones
+       strands a visitor in someone else's look with no way out. */
+    bottom: 20px;
+    z-index: 55;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem 0.5rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--pill);
+    background: color-mix(in srgb, var(--ink-raised) 88%, transparent);
+    backdrop-filter: blur(14px);
+    color: var(--muted);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    box-shadow: var(--shadow-card);
+    transition:
+      color 200ms ease,
+      border-color 200ms ease,
+      transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (min-width: 640px) {
+    .grade-trigger {
+      bottom: 60px;
+    }
+  }
+
+  .grade-trigger:hover {
+    color: var(--bone);
+    border-color: color-mix(in srgb, var(--bone) 30%, var(--line));
+    transform: translateY(-2px);
+  }
+
+  .grade-trigger[data-dirty] {
+    color: var(--watch);
+    border-color: color-mix(in srgb, var(--watch) 42%, var(--line));
+  }
+
+  .grade-key {
+    display: grid;
+    place-items: center;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font: inherit;
+    font-size: 9px;
+    line-height: 1;
+    color: var(--muted);
+  }
+
+  .grade-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 66px;
+    z-index: 56;
+    width: min(300px, calc(100vw - 40px));
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--ink-raised) 94%, transparent);
+    backdrop-filter: blur(20px) saturate(1.3);
+    box-shadow: var(--shadow-panel);
+    /* Closed state is the resting state, so it is declared here rather than
+       in an [data-open="false"] rule that would never match on first paint. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.98);
+    transform-origin: 100% 100%;
+    transition:
+      opacity 220ms ease,
+      transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 320ms;
+  }
+
+  .grade-panel[data-open] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 180ms ease,
+      transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grade-panel {
+      transition:
+        opacity 120ms linear,
+        visibility 0s linear 120ms;
+      transform: none;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .grade-panel {
+      bottom: 106px;
+    }
+  }
+
+  .grade-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .grade-title {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--bone);
+  }
+
+  .grade-sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .grade-close {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    margin: -2px -2px 0 0;
+    border-radius: 4px;
+    color: var(--muted);
+    transition: color 180ms ease, background 180ms ease;
+  }
+
+  .grade-close:hover {
+    color: var(--bone);
+    background: var(--surface-2);
+  }
+
+  .grade-luts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .grade-lut {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-align: left;
+    transition: border-color 180ms ease, background 180ms ease;
+  }
+
+  .grade-lut:hover {
+    background: var(--surface-2);
+  }
+
+  .grade-lut[data-active] {
+    border-color: color-mix(in srgb, var(--bone) 34%, var(--line));
+    background: var(--surface-2);
+  }
+
+  /* The swatch carries a spread of skin, sky and foliage rather than a flat
+     colour, because a LUT that only moves shadows shows nothing on a solid
+     chip. */
+  .grade-swatch {
+    display: block;
+    height: 26px;
+    border-radius: 3px;
+    background:
+      linear-gradient(
+        100deg,
+        #10161f 0%,
+        #2c4a5e 22%,
+        #6f8f7a 44%,
+        #d8a97e 68%,
+        #f2e4d2 88%,
+        #ffffff 100%
+      );
+  }
+
+  .grade-lut-name {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    color: var(--muted);
+  }
+
+  .grade-lut[data-active] .grade-lut-name {
+    color: var(--bone);
+  }
+
+  .grade-sliders {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .grade-slider-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .grade-slider-head output {
+    /* Tabular figures: the readout must not jitter as the value changes. */
+    font-variant-numeric: tabular-nums;
+    color: var(--bone);
+  }
+
+  .grade-slider-head em {
+    font-style: normal;
+    color: var(--muted);
+  }
+
+  .grade-slider input[type="range"] {
+    /* Without this the track and thumb rules below are ignored entirely and
+       the control falls back to the platform's blue slider. */
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 14px;
+    background: transparent;
+    cursor: ew-resize;
+  }
+
+  .grade-slider input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .grade-slider input[type="range"]::-moz-range-track {
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .grade-slider input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    margin-top: -4.5px;
+    border-radius: 50%;
+    background: var(--bone);
+    transition: transform 160ms ease;
+  }
+
+  .grade-slider input[type="range"]::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--bone);
+  }
+
+  .grade-slider input[type="range"]:hover::-webkit-slider-thumb,
+  .grade-slider input[type="range"]:focus-visible::-webkit-slider-thumb {
+    transform: scale(1.25);
+  }
+
+  .grade-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.9rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .grade-note {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .grade-reset {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--watch);
+    transition: opacity 180ms ease;
+  }
+
+  .grade-reset:disabled {
+    color: var(--muted);
+    opacity: 0.5;
+    cursor: default;
+  }
+
   /* Ticker. Translating -50% works because the track holds exactly two
    * identical rows, so the reset lands on a matching frame. */
   .marquee-track {
@@ -579,17 +1282,11 @@
    * element does the idle float. One element cannot hold both, because the
    * two would fight over `transform`.
    */
+  /* The spring loop in FloatingChips writes transform inline; declaring one
+     here too would leave the two fighting over the same property. Pointer
+     displacement and idle drift both live in that solver now. */
   .chip-shell {
-    transform: translate(
-      calc(var(--mx, 0) * var(--depth, 20) * 1px),
-      calc(var(--my, 0) * var(--depth, 20) * 1px)
-    );
     will-change: transform;
-  }
-
-  .chip-float {
-    display: inline-block;
-    animation: chip-float 7s ease-in-out infinite;
   }
 
   .chip {
@@ -1050,9 +1747,9 @@
   50%      { transform: translate3d(-14px, -22px, 0); }
 }
 
-@keyframes chip-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-11px) rotate(-1.1deg); }
+@keyframes egg-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
 }
 
 @keyframes marquee {

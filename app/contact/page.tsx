@@ -20,6 +20,7 @@ export default function ContactPage() {
 
       <section
         data-timecode={contact.timecode}
+        data-timecode-label="END OF REEL"
         className={`py-24 md:py-32 ${PAD}`}
       >
         <div className="shell">

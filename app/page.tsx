@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Button from "@/components/Button";
+import Decode from "@/components/Decode";
 import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
 import HeroPortrait from "@/components/HeroPortrait";
@@ -43,6 +44,7 @@ export default function Home() {
       <section
         id="hero"
         data-timecode="00:00:00:00"
+        data-timecode-label="HERO"
         className={`relative overflow-hidden pb-20 pt-8 md:pb-28 md:pt-12 ${PAD}`}
       >
         <Parallax distance={40} className="absolute inset-0 z-0">
@@ -142,10 +144,11 @@ export default function Home() {
       {/* ── 02 · THE FORK — 00:00:12:04 ─────────────────────────── */}
       <section
         data-timecode={fork.build.timecode}
+        data-timecode-label="THE FORK"
         className={`py-16 md:py-24 ${PAD}`}
       >
         <div className="shell grid gap-5 md:grid-cols-2">
-          <div className="ground-build panel group relative flex min-h-[380px] flex-col overflow-hidden p-8 md:p-12">
+          <div className="ground-build panel tilt group relative flex min-h-[380px] flex-col overflow-hidden p-8 md:p-12">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-[400ms] md:group-hover:opacity-[0.09]"
@@ -157,9 +160,11 @@ export default function Home() {
                 label={fork.build.label}
                 accent="build"
               />
-              <h2 className="t-h2 text-[var(--bone)] transition-transform duration-[400ms] md:group-hover:translate-x-[6px]">
-                {fork.build.heading}
-              </h2>
+              <Decode
+                as="h2"
+                text={fork.build.heading}
+                className="t-h2 text-[var(--bone)] transition-transform duration-[400ms] md:group-hover:translate-x-[6px] block"
+              />
             </FadeIn>
 
             <FadeIn delay={0.1} className="relative mt-8">
@@ -180,7 +185,7 @@ export default function Home() {
             </FadeIn>
           </div>
 
-          <div className="ground-watch panel group relative flex min-h-[380px] flex-col overflow-hidden p-8 md:p-12">
+          <div className="ground-watch panel tilt group relative flex min-h-[380px] flex-col overflow-hidden p-8 md:p-12">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-[400ms] md:group-hover:opacity-[0.09]"
@@ -192,9 +197,11 @@ export default function Home() {
                 label={fork.watch.label}
                 accent="watch"
               />
-              <h2 className="t-h2 text-[var(--bone)] transition-transform duration-[400ms] md:group-hover:translate-x-[6px]">
-                {fork.watch.heading}
-              </h2>
+              <Decode
+                as="h2"
+                text={fork.watch.heading}
+                className="t-h2 text-[var(--bone)] transition-transform duration-[400ms] md:group-hover:translate-x-[6px] block"
+              />
             </FadeIn>
 
             <FadeIn delay={0.1} className="relative mt-8">
@@ -221,6 +228,7 @@ export default function Home() {
       <section
         id="work"
         data-timecode="00:01:08:16"
+        data-timecode-label="SELECTED WORK"
         className={`py-24 md:py-36 ${PAD}`}
       >
         <div className="shell">
@@ -251,6 +259,7 @@ export default function Home() {
       {/* ── 04 · REEL STRIP — 00:01:52:07 ───────────────────────── */}
       <section
         data-timecode="00:01:52:07"
+        data-timecode-label="FRAMES"
         className="ground-alt overflow-hidden py-24 md:py-28"
       >
         <div className={PAD}>
@@ -278,6 +287,7 @@ export default function Home() {
       {/* ── 05 · WHERE CODE MEETS CREATIVE — 00:02:14:02 ────────── */}
       <section
         data-timecode={bridge.timecode}
+        data-timecode-label="TWO CRAFTS"
         className={`py-24 md:py-36 ${PAD}`}
       >
         <div className="shell">
@@ -355,6 +365,7 @@ export default function Home() {
       {/* ── 06 · EXPERIENCE — 00:03:06:19 ───────────────────────── */}
       <section
         data-timecode="00:03:06:19"
+        data-timecode-label="TIMELINE"
         className={`py-24 md:py-32 ${PAD}`}
       >
         <div className="shell">
@@ -403,6 +414,7 @@ export default function Home() {
       <section
         id="contact"
         data-timecode={contact.timecode}
+        data-timecode-label="END OF REEL"
         className={`py-24 md:py-32 ${PAD}`}
       >
         <div className="shell">

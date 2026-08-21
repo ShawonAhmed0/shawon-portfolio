@@ -44,6 +44,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* HEADER */}
       <section
         data-timecode={MARK.header.code}
+        data-timecode-label="CASE STUDY"
         className={`pb-16 pt-20 md:pt-28 ${PAD}`}
       >
         <div className="shell">
@@ -86,7 +87,7 @@ export default async function ProjectPage({ params }: PageProps) {
             ).map(([label, value]) => (
               <div
                 key={label}
-                className="panel p-6 md:p-8"
+                className="panel tilt p-6 md:p-8"
               >
                 <p className="t-label" style={{ color: accentVar }}>
                   {label}
@@ -103,6 +104,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* PROBLEM */}
       <section
         data-timecode={MARK.problem.code}
+        data-timecode-label="PROBLEM"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
@@ -120,6 +122,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* SOLUTION */}
       <section
         data-timecode={MARK.solution.code}
+        data-timecode-label="SOLUTION"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
@@ -148,6 +151,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* KEY CHALLENGES */}
       <section
         data-timecode={MARK.challenges.code}
+        data-timecode-label="KEY CHALLENGES"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
@@ -180,6 +184,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* ARCHITECTURE */}
       <section
         data-timecode={MARK.architecture.code}
+        data-timecode-label="ARCHITECTURE"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
@@ -197,6 +202,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* MEDIA */}
       <section
         data-timecode={MARK.media.code}
+        data-timecode-label="FRAMES"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
@@ -230,6 +236,7 @@ export default async function ProjectPage({ params }: PageProps) {
       {/* LINKS */}
       <section
         data-timecode={MARK.links.code}
+        data-timecode-label="LINKS"
         className={`py-16 md:py-20 ${PAD}`}
       >
         <div className="shell">
