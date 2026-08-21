@@ -6,11 +6,12 @@ import { HERO_SWAP_MS, HERO_SWAP_STAGGER, THEME_WILL_CHANGE } from "@/lib/theme"
 /**
  * Animates the hero columns trading sides.
  *
- * The end state is CSS (see .hero-grid in globals): light mode puts the
- * portrait left and the copy right from md up. `order` and
- * `grid-template-columns` are not animatable, so this FLIPs it — measure
- * where things were, let the new layout land, then transform them back and
- * play them to zero.
+ * The end state is CSS (see .hero-grid in globals): from md up the two trade
+ * sides with the theme. `order` and `grid-template-columns` are not
+ * animatable, so this FLIPs it — measure where things were, let the new
+ * layout land, then transform them back and play them to zero. Which side
+ * each ends on is not encoded here; the direction falls out of the measured
+ * delta, so flipping the CSS is enough to reverse the whole animation.
  *
  * The two columns move differently on purpose. The portrait is the anchor and
  * simply glides across, so the eye has something continuous to hold. The copy

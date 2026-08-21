@@ -72,10 +72,10 @@
   --theme-shift: 460ms;
 
   /* Where the hero canvas puts the pool it paints under the portrait, as a
-     fraction of hero width. The portrait trades sides in light mode from md
-     up, so the pool has to follow it — see the light block and the media
-     query below. */
-  --pool-x: 0.78;
+     fraction of hero width. Below md the portrait is centred in both themes,
+     so this is centre; from md up it takes a side and the media query below
+     moves the pool with it. */
+  --pool-x: 0.5;
 
   --r: 4px;
   --pill: 999px;
@@ -143,8 +143,13 @@
 }
 
 @media (min-width: 768px) {
-  :root[data-theme="light"] {
+  /* Dark puts the portrait on the left, light on the right. */
+  :root {
     --pool-x: 0.24;
+  }
+
+  :root[data-theme="light"] {
+    --pool-x: 0.78;
   }
 }
 
@@ -346,9 +351,10 @@
   }
 
   /* ── Hero columns ───────────────────────────────────────────────────
-   * Light mode trades the sides from md up: portrait left, copy right. The
-   * end state is pure CSS so it is correct on first paint with no JS; the
-   * slide between the two states is HeroSwap's job.
+   * The two trade sides with the theme from md up: dark puts the portrait
+   * left and the copy right, light does the reverse. The end state is pure
+   * CSS so it is correct on first paint with no JS; the slide between the two
+   * states is HeroSwap's job.
    *
    * Placement is declared here rather than with Tailwind order/col utilities
    * because those land in @layer utilities, which would outrank the light
@@ -369,29 +375,29 @@
 
   @media (min-width: 768px) {
     .hero-grid {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    .hero-copy {
-      order: 1;
-    }
-
-    .hero-figure {
-      order: 2;
-      justify-self: end;
-    }
-
-    :root[data-theme="light"] .hero-grid {
       grid-template-columns: auto minmax(0, 1fr);
     }
 
-    :root[data-theme="light"] .hero-copy {
+    .hero-copy {
       order: 2;
     }
 
-    :root[data-theme="light"] .hero-figure {
+    .hero-figure {
       order: 1;
       justify-self: start;
+    }
+
+    :root[data-theme="light"] .hero-grid {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    :root[data-theme="light"] .hero-copy {
+      order: 1;
+    }
+
+    :root[data-theme="light"] .hero-figure {
+      order: 2;
+      justify-self: end;
     }
   }
 
@@ -549,7 +555,7 @@
   .bezier-graph {
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     width: 150px;
     height: 120px;
     opacity: 0.85;
@@ -563,8 +569,8 @@
 
   @media (min-width: 768px) {
     :root[data-theme="light"] .bezier-graph {
-      right: auto;
-      left: 0;
+      left: auto;
+      right: 0;
     }
   }
 
