@@ -700,6 +700,65 @@
     transition: transform 180ms linear;
   }
 
+  /* ── Wordmark ───────────────────────────────────────────────────────
+   * The name on a transport track, surname as the active clip. Same shapes
+   * as the favicon and the transport bar, so the identity reads as one idea.
+   */
+  .wordmark {
+    position: relative;
+    display: inline-block;
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.028em;
+    line-height: 1;
+    color: var(--bone);
+    white-space: nowrap;
+  }
+
+  /* The track. Sits below the baseline in em, so it follows the type rather
+     than needing a new offset at every size the mark is used at. */
+  .wordmark::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.32em;
+    height: 0.115em;
+    min-height: 2px;
+    border-radius: 99px;
+    background: var(--line);
+  }
+
+  /* The clip is drawn by the surname's own box, which is what keeps it
+     locked to those letterforms instead of to a hardcoded percentage. */
+  .wordmark-clip {
+    position: relative;
+  }
+
+  .wordmark-clip::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.32em;
+    height: 0.115em;
+    min-height: 2px;
+    border-radius: 99px;
+    background: var(--watch);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    animation: clip-place 560ms cubic-bezier(0.16, 1, 0.3, 1) 420ms both;
+  }
+
+  /* Placed, not faded in: a clip lands on a track from one end. */
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark-clip::after {
+      animation: none;
+      transform: none;
+    }
+  }
+
   /* ── Transport ──────────────────────────────────────────────────────
    * The page as an edit timeline. Named `transport` rather than `timeline`
    * because the experience list downpage already owns `.timeline`, and two
@@ -1750,6 +1809,11 @@
 @keyframes egg-in {
   from { opacity: 0; transform: translate(-50%, 8px); }
   to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes clip-place {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 @keyframes marquee {

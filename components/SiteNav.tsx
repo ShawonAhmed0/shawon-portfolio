@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
+import Wordmark from "@/components/Wordmark";
 import { navLinks, site } from "@/content/site";
 
 export default function SiteNav() {
@@ -54,10 +55,10 @@ export default function SiteNav() {
       <nav className="shell flex items-center justify-between gap-8 px-5 py-4 sm:px-8 md:px-12 lg:px-16">
         <Link
           href="/"
-          className="t-h3 shrink-0 leading-none text-[var(--bone)] transition-opacity duration-200 hover:opacity-70"
-          style={{ fontSize: "1.15rem", letterSpacing: "-0.028em", fontWeight: 800 }}
+          aria-label={`${site.mark} — home`}
+          className="shrink-0 transition-opacity duration-200 hover:opacity-70"
         >
-          {site.mark}
+          <Wordmark />
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">
