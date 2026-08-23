@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
+import JsonLd from "@/components/JsonLd";
 import { site } from "@/content/site";
 
 // Modern variable grotesque. Tight tracking at display weight is what reads
@@ -54,12 +55,18 @@ export const metadata: Metadata = {
      against localhost and warns at build. Every share card on the live
      domain depends on this one line. */
   metadataBase: new URL(site.url),
-  title: site.title,
+  /* Template applies to every child that sets a title, so pages carry a short
+     one — "Web Developer" — and the name is appended once, here. */
+  title: { default: site.title, template: `%s — ${site.name}` },
   description: site.intro,
-  alternates: { canonical: "/" },
+  /* Deliberately no `alternates` and no `openGraph.url`.
+     Metadata is inherited, so a canonical set here becomes every page's
+     canonical unless it overrides — which pointed all eight sub-pages at the
+     home page and asked search engines to drop them. Left unset, a page that
+     forgets gets no canonical at all: neutral, rather than actively wrong.
+     Each page builds its own through `pageMetadata` in lib/seo.ts. */
   openGraph: {
     type: "website",
-    url: "/",
     siteName: site.name,
     title: site.title,
     description: site.intro,
@@ -109,6 +116,7 @@ export default function RootLayout({
               "try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t}}catch(e){}",
           }}
         />
+        <JsonLd />
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

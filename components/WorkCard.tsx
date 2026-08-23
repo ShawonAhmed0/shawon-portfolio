@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Accent, Project } from "@/content/projects";
+import { real } from "@/lib/placeholder";
 
 const ACCENT_VAR: Record<Accent, string> = {
   build: "var(--build)",
@@ -116,12 +117,14 @@ export default function WorkCard({ project, featured = false }: WorkCardProps) {
           </span>
         </div>
 
-        <p
-          className={`t-body ${project.taglineIsBengali ? "t-bn" : ""}`}
-          style={{ margin: 0 }}
-        >
-          {project.cardLine}
-        </p>
+        {real(project.cardLine) ? (
+          <p
+            className={`t-body ${project.taglineIsBengali ? "t-bn" : ""}`}
+            style={{ margin: 0 }}
+          >
+            {project.cardLine}
+          </p>
+        ) : null}
 
         <div className="mt-auto flex flex-wrap gap-2 pt-3">
           <span
@@ -133,12 +136,14 @@ export default function WorkCard({ project, featured = false }: WorkCardProps) {
           >
             {project.index}
           </span>
-          <span
-            className="rounded-[var(--pill)] px-3 py-1 text-[11px] font-medium"
-            style={{ background: "var(--surface-2)", color: "var(--muted)" }}
-          >
-            {project.meta.type}
-          </span>
+          {real(project.meta.type) ? (
+            <span
+              className="rounded-[var(--pill)] px-3 py-1 text-[11px] font-medium"
+              style={{ background: "var(--surface-2)", color: "var(--muted)" }}
+            >
+              {project.meta.type}
+            </span>
+          ) : null}
         </div>
       </div>
     </Link>

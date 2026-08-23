@@ -3,9 +3,9 @@
     "url": "https://shawonahmed.com",
     "name": "Shawon Ahmed",
     "mark": "Shawon Ahmed",
-    "title": "Shawon — Software Engineer × Performance Creative",
+    "title": "Shawon Ahmed — Web Developer & Video Editor",
     "role": "Software Engineer × Performance Creative",
-    "intro": "I build modern digital products and create high-performing visual experiences.",
+    "intro": "Web developer and video editor. I build modern digital products and create high-performing visual experiences.",
     "year": "2026"
   },
   "portrait": {
@@ -41,7 +41,7 @@
       "timecode": "00:00:12:04",
       "label": "SOFTWARE",
       "heading": "BUILD",
-      "body": "Building modern web applications and AI-powered products.",
+      "body": "Web developer building modern web applications and AI-powered products.",
       "stack": "REACT · NEXT.JS · NODE.JS · POSTGRESQL",
       "cta": "VIEW SOFTWARE",
       "href": "/software"
@@ -50,7 +50,7 @@
       "timecode": "00:00:31:18",
       "label": "CREATIVE",
       "heading": "WATCH",
-      "body": "Editing performance-focused ads designed to capture attention.",
+      "body": "Video editor making performance-focused ads designed to capture attention.",
       "stack": "UGC · META ADS · VSL · AI CREATIVE",
       "cta": "VIEW CREATIVE",
       "href": "/editing"
@@ -110,7 +110,7 @@
     "heading": "I edit ads designed to hold attention.",
     "subheading": "UGC Ads. VSLs. Meta Ads. Short-Form Content.",
     "body": "5+ years of experience creating performance-focused video content for brands and eCommerce.",
-    "positioning": "Performance Creative Editor",
+    "positioning": "Video Editor · Performance Creative",
     "emphasis": [
       "Hooks",
       "Retention",

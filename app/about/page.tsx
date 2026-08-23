@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import Button from "@/components/Button";
 import FadeIn from "@/components/FadeIn";
@@ -9,10 +10,13 @@ import { experience } from "@/content/experience";
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
 const MARK = pageMarks.about;
 
-export const metadata: Metadata = {
-  title: `About — ${site.title}`,
-  description: site.intro,
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/about",
+  title: "About",
+  // Its own description rather than the site intro: three pages sharing one
+  // string is three pages a search engine treats as the same page.
+  description: `About Shawon Ahmed — web developer and video editor. ${engineering.about[0] ?? site.intro}`.slice(0, 300),
+});
 
 export default function AboutPage() {
   return (

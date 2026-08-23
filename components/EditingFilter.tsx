@@ -3,14 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import { editing } from "@/content/site";
+import { real } from "@/lib/placeholder";
 
 export default function EditingFilter() {
   const [active, setActive] = useState(editing.categories[0]);
 
+  /* Items whose title is still a TODO are not shown at all. A grid of
+     "TODO: VSL title" cards reads as an unfinished site to a visitor and as
+     thin content to a crawler; five real pieces beat six with a hole. */
+  const ready = editing.work.filter((item) => real(item.title));
+
   const visible =
     active === editing.categories[0]
-      ? editing.work
-      : editing.work.filter((item) => item.category === active);
+      ? ready
+      : ready.filter((item) => item.category === active);
 
   return (
     <div>

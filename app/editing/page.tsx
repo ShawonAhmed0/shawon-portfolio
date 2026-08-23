@@ -4,23 +4,27 @@ import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
+import { pageMetadata } from "@/lib/seo";
 import { embedUrl } from "@/lib/embed";
-import { editing, pageMarks, site } from "@/content/site";
+import { real } from "@/lib/placeholder";
+import { editing, pageMarks } from "@/content/site";
 import { experience } from "@/content/experience";
 import { services } from "@/content/services";
 
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
 const MARK = pageMarks.editing;
 
-export const metadata: Metadata = {
-  title: `Editing — ${site.title}`,
-  description: editing.body,
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/editing",
+  title: "Video Editor",
+  description: `Shawon Ahmed, video editor. ${editing.body}`,
+});
 
 export default function EditingPage() {
   // Resolved once here rather than in the markup: null is the signal that
   // no usable link is set, and the placeholder is what should render then.
   const showreel = embedUrl(editing.showreelUrl);
+  const showreelNote = real(editing.showreelNote);
 
   const editingExperience = experience.filter((row) => row.accent === "watch");
 
@@ -72,46 +76,48 @@ export default function EditingPage() {
       </section>
 
       {/* SHOWREEL */}
-      <section
-        data-timecode={MARK.showreel.code}
-        data-timecode-label="SHOWREEL"
-        className={`py-20 md:py-28 ${PAD}`}
-      >
-        <div className="shell">
-          <FadeIn>
-            <Timecode
-              code={MARK.showreel.code}
-              label={MARK.showreel.label}
-              accent="watch"
-            />
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            {showreel ? (
-              <div
-                data-playhead
-                className="panel ground-watch aspect-video w-full overflow-hidden"
-              >
-                <iframe
-                  src={showreel}
-                  title="Showreel"
-                  className="h-full w-full border-0"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
-            ) : (
-              <div
-                data-playhead
-                className="panel ground-watch flex aspect-video w-full items-center justify-center"
-              >
-                <p className="t-label">{editing.showreelNote}</p>
-              </div>
-            )}
-          </FadeIn>
-        </div>
-      </section>
+      {showreel || showreelNote ? (
+        <section
+          data-timecode={MARK.showreel.code}
+          data-timecode-label="SHOWREEL"
+          className={`py-20 md:py-28 ${PAD}`}
+        >
+          <div className="shell">
+            <FadeIn>
+              <Timecode
+                code={MARK.showreel.code}
+                label={MARK.showreel.label}
+                accent="watch"
+              />
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              {showreel ? (
+                <div
+                  data-playhead
+                  className="panel ground-watch aspect-video w-full overflow-hidden"
+                >
+                  <iframe
+                    src={showreel}
+                    title="Showreel"
+                    className="h-full w-full border-0"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              ) : showreelNote ? (
+                <div
+                  data-playhead
+                  className="panel ground-watch flex aspect-video w-full items-center justify-center"
+                >
+                  <p className="t-label">{showreelNote}</p>
+                </div>
+              ) : null}
+            </FadeIn>
+          </div>
+        </section>
+      ) : null}
 
       {/* WORK */}
       <section

@@ -1,17 +1,20 @@
+import { pageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
-import { contact, site } from "@/content/site";
+import { contact } from "@/content/site";
 
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
 
-export const metadata: Metadata = {
-  title: `Contact — ${site.title}`,
-  description: site.intro,
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/contact",
+  title: "Contact",
+  description:
+    "Get in touch with Shawon Ahmed — web developer and video editor. Available for new projects.",
+});
 
 export default function ContactPage() {
   return (

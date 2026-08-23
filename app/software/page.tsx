@@ -1,21 +1,28 @@
+import { pageMetadata } from "@/lib/seo";
+import { real, realHref } from "@/lib/placeholder";
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import Button from "@/components/Button";
 import FadeIn from "@/components/FadeIn";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
-import { engineering, fork, pageMarks, site } from "@/content/site";
+import { engineering, fork, pageMarks } from "@/content/site";
 import { projects } from "@/content/projects";
 
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
 const MARK = pageMarks.software;
 
-export const metadata: Metadata = {
-  title: `Software — ${site.title}`,
-  description: fork.build.body,
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/software",
+  // The literal phrase people search for. "Software" alone matched nothing a
+  // person types; the brand line stays on the page itself.
+  title: "Web Developer",
+  description: `Shawon Ahmed — ${fork.build.body}`,
+});
 
 export default function SoftwarePage() {
+  const resumeHref = realHref(engineering.resume.href);
+
   const buildProjects = projects.filter((p) => p.accent === "build");
 
   return (
@@ -185,13 +192,15 @@ export default function SoftwarePage() {
                   >
                     {project.name}
                   </h3>
-                  <p
-                    className={`t-body mt-3 ${
-                      project.taglineIsBengali ? "t-bn" : ""
-                    }`}
-                  >
-                    {project.cardLine}
-                  </p>
+                  {real(project.cardLine) ? (
+                    <p
+                      className={`t-body mt-3 ${
+                        project.taglineIsBengali ? "t-bn" : ""
+                      }`}
+                    >
+                      {project.cardLine}
+                    </p>
+                  ) : null}
                   <Button
                     variant="build"
                     href={`/projects/${project.slug}`}
@@ -209,26 +218,31 @@ export default function SoftwarePage() {
         </div>
       </section>
 
-      {/* RESUME */}
-      <section
-        data-timecode={MARK.resume.code}
-        data-timecode-label="DOCUMENTS"
-        className={`py-20 ${PAD}`}
-      >
-        <div className="shell">
-          <FadeIn>
-            <Timecode
-              code={MARK.resume.code}
-              label={MARK.resume.label}
-              accent="build"
-            />
-            <Button variant="build" href={engineering.resume.href}>
-              {engineering.resume.label}
-            </Button>
-            <p className="t-label mt-4">{engineering.resume.note}</p>
-          </FadeIn>
-        </div>
-      </section>
+      {/* RESUME — hidden until a real file is linked. A download button
+          that goes to "#" is worse than no button. */}
+      {resumeHref ? (
+        <section
+          data-timecode={MARK.resume.code}
+          data-timecode-label="DOCUMENTS"
+          className={`py-20 ${PAD}`}
+        >
+          <div className="shell">
+            <FadeIn>
+              <Timecode
+                code={MARK.resume.code}
+                label={MARK.resume.label}
+                accent="build"
+              />
+              <Button variant="build" href={resumeHref}>
+                {engineering.resume.label}
+              </Button>
+              {real(engineering.resume.note) ? (
+              <p className="t-label mt-4">{engineering.resume.note}</p>
+            ) : null}
+            </FadeIn>
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

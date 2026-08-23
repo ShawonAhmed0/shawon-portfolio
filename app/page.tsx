@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import type { CSSProperties } from "react";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Button from "@/components/Button";
@@ -31,6 +33,11 @@ import { experience } from "@/content/experience";
 import { projects } from "@/content/projects";
 
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
+
+export const metadata: Metadata = pageMetadata({
+  path: "/",
+  description: site.intro,
+});
 
 export default function Home() {
   return (
@@ -70,6 +77,7 @@ export default function Home() {
                   <span aria-hidden className="pill-dot" />
                   <RoleCycler
                     phrases={[
+                      "Web Developer",
                       "Software Engineer",
                       "Performance Creative",
                       "Video Editor",
