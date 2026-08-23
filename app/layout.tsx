@@ -56,8 +56,36 @@ const bengali = Noto_Sans_Bengali({
 });
 
 export const metadata: Metadata = {
+  /* Without metadataBase, Next resolves the OG and Twitter image paths
+     against localhost and warns at build. Every share card on the live
+     domain depends on this one line. */
+  metadataBase: new URL(site.url),
   title: site.title,
   description: site.intro,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: site.name,
+    title: site.title,
+    description: site.intro,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.intro,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {

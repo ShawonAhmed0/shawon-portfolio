@@ -11,6 +11,10 @@ export type EditingWorkItem = {
 };
 
 export const site = {
+  /** Canonical origin. Every absolute URL the site emits derives from this,
+   *  so a domain change is one edit rather than a search across metadata,
+   *  the sitemap and robots. */
+  url: "https://shawonahmed.com",
   name: "Shawon Ahmed",
   mark: "Shawon Ahmed",
   title: "Shawon — Software Engineer × Performance Creative",
