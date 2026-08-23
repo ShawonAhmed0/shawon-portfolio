@@ -1,0 +1,487 @@
+/*
+  The editor's surface.
+  ---------------------------------------------------------------------------
+  Its own stylesheet rather than a block in globals.css, so it code-splits onto
+  the two routes that use it instead of shipping to every visitor.
+
+  It borrows the site's tokens on purpose. The panel is not a separate product
+  with its own look — it is the back of the same set, so hairlines, accents and
+  the mono label voice all carry over. Everything here is prefixed `ad-` and
+  none of it leaks into the pages.
+*/
+
+.ad-shell {
+  min-height: 100dvh;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* ── Sign-in ──────────────────────────────────────────────────────────── */
+
+.ad-gate {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.ad-gate-card {
+  width: 100%;
+  max-width: 340px;
+  padding: 32px 28px 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--r) * 2);
+  box-shadow: var(--shadow-panel);
+}
+
+.ad-gate-note {
+  margin: 14px 0 24px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ── Frame ────────────────────────────────────────────────────────────── */
+
+.ad-top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: color-mix(in srgb, var(--ink) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.ad-top-spacer { flex: 1; }
+
+.ad-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Room for the fixed save bar so the last field is never trapped under it. */
+  padding: 0 16px 132px;
+}
+
+@media (min-width: 900px) {
+  .ad-body {
+    grid-template-columns: 208px minmax(0, 1fr);
+    gap: 36px;
+    padding: 0 24px 132px;
+  }
+}
+
+/* ── Section rail ─────────────────────────────────────────────────────── */
+
+.ad-rail {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 14px 0;
+  /* Horizontal scroller on phones; the rail is wider than the viewport and
+     must not force the page itself to scroll sideways. */
+  scrollbar-width: none;
+}
+.ad-rail::-webkit-scrollbar { display: none; }
+
+@media (min-width: 900px) {
+  .ad-rail {
+    position: sticky;
+    top: 61px;
+    align-self: start;
+    flex-direction: column;
+    overflow: visible;
+    padding: 24px 0;
+    max-height: calc(100dvh - 61px);
+  }
+}
+
+.ad-rail-item {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.ad-rail-item:hover { color: var(--bone); background: var(--surface); }
+
+.ad-rail-item[aria-current="true"] {
+  color: var(--bone);
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+/* A section holding unsaved edits earns a dot, so the rail doubles as a map
+   of what a publish is about to include. */
+.ad-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--pill);
+  background: var(--watch);
+  flex: none;
+}
+
+/* ── Panels ───────────────────────────────────────────────────────────── */
+
+.ad-main { padding: 8px 0 0; min-width: 0; }
+
+@media (min-width: 900px) { .ad-main { padding: 24px 0 0; } }
+
+.ad-h {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--bone);
+}
+
+.ad-sub {
+  margin-top: 6px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.ad-card {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--r) * 2);
+}
+
+.ad-card-h {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 16px;
+}
+
+.ad-stack { display: flex; flex-direction: column; gap: 16px; }
+.ad-row { display: grid; gap: 16px; }
+@media (min-width: 700px) { .ad-row-2 { grid-template-columns: 1fr 1fr; } }
+
+/* ── Fields ───────────────────────────────────────────────────────────── */
+
+.ad-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+
+.ad-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ad-hint {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--faint);
+}
+
+.ad-input,
+.ad-area,
+.ad-select {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  color: var(--bone);
+  font-family: inherit;
+  /* 16px so iOS Safari does not zoom the viewport on focus, which on a phone
+     leaves the user scrolled sideways inside a form they cannot see. */
+  font-size: 16px;
+  line-height: 1.5;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+@media (min-width: 700px) {
+  .ad-input, .ad-area, .ad-select { font-size: 0.9rem; }
+}
+
+.ad-area { resize: vertical; min-height: 96px; }
+
+.ad-input:focus-visible,
+.ad-area:focus-visible,
+.ad-select:focus-visible {
+  outline: none;
+  border-color: var(--build);
+  background: var(--surface-2);
+}
+
+.ad-input::placeholder, .ad-area::placeholder { color: var(--faint); }
+
+/* A field still carrying a TODO from the original content, flagged so the
+   gaps are visible without hunting for them. */
+.ad-input[data-todo="true"], .ad-area[data-todo="true"] {
+  border-color: color-mix(in srgb, var(--watch) 55%, var(--line));
+}
+
+.ad-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  color: var(--bone);
+  cursor: pointer;
+}
+
+.ad-check input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 38px;
+  height: 22px;
+  border-radius: var(--pill);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+  flex: none;
+}
+
+.ad-check input::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--pill);
+  background: var(--muted);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms ease;
+}
+
+.ad-check input:checked { background: color-mix(in srgb, var(--build) 26%, var(--surface-2)); border-color: var(--build); }
+.ad-check input:checked::after { transform: translateX(16px); background: var(--build); }
+
+/* ── Lists and repeaters ──────────────────────────────────────────────── */
+
+.ad-list { display: flex; flex-direction: column; gap: 8px; }
+
+.ad-list-row { display: flex; gap: 8px; align-items: center; }
+
+.ad-item {
+  border: 1px solid var(--line);
+  border-radius: calc(var(--r) * 1.5);
+  background: var(--ink-raised);
+  overflow: hidden;
+}
+
+.ad-item + .ad-item { margin-top: 12px; }
+
+.ad-item-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border-bottom: 1px solid transparent;
+}
+
+.ad-item[data-open="true"] .ad-item-bar { border-bottom-color: var(--line); }
+
+.ad-item-title {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--bone);
+  background: none;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ad-item-body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+
+.ad-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--bone);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.ad-btn:hover:not(:disabled) { border-color: var(--muted); }
+.ad-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ad-btn-primary {
+  background: var(--build);
+  border-color: var(--build);
+  /* Fixed near-black rather than a token: --ink flips to near-white in the
+     light theme, which would put white text on the green. */
+  color: #0b1410;
+  font-weight: 600;
+}
+.ad-btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+.ad-btn-ghost { background: transparent; }
+
+.ad-btn-danger { color: var(--watch); }
+.ad-btn-danger:hover:not(:disabled) { border-color: var(--watch); }
+
+.ad-icon-btn {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.ad-icon-btn:hover:not(:disabled) { color: var(--bone); border-color: var(--muted); }
+.ad-icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── Media ────────────────────────────────────────────────────────────── */
+
+.ad-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.ad-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ad-thumb-empty {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.ad-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 7px;
+  border-radius: var(--pill);
+  background: var(--watch);
+  color: #1a0f06;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.ad-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+
+.ad-media-pick {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface-2);
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.ad-media-pick img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ad-media-pick:hover { border-color: var(--build); }
+
+/* ── Save bar ─────────────────────────────────────────────────────────── */
+
+.ad-save {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+}
+
+.ad-save-text { flex: 1; min-width: 0; font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+
+.ad-error { color: var(--watch); font-size: 0.8rem; line-height: 1.5; min-height: 1.2em; margin: 0; }
+.ad-ok { color: var(--build); font-size: 0.8rem; line-height: 1.5; }
+
+.ad-issues { margin: 8px 0 0; padding-left: 18px; color: var(--watch); font-size: 0.78rem; line-height: 1.6; }
+
+.ad-note {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--watch);
+  border-radius: var(--r);
+  background: var(--ink-raised);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.ad-note code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.9em;
+  color: var(--bone);
+}
+
+.ad-mode {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--line);
+  border-radius: var(--pill);
+  padding: 3px 9px;
+}

@@ -1,0 +1,232 @@
+{
+  "site": {
+    "url": "https://shawonahmed.com",
+    "name": "Shawon Ahmed",
+    "mark": "Shawon Ahmed",
+    "title": "Shawon — Software Engineer × Performance Creative",
+    "role": "Software Engineer × Performance Creative",
+    "intro": "I build modern digital products and create high-performing visual experiences.",
+    "year": "2026"
+  },
+  "portrait": {
+    "src": "/me/shawon-light-v4.webp",
+    "srcDark": "/me/shawon-v3-dark.webp",
+    "alt": "Shawon",
+    "slate": "SUBJECT / SHAWON"
+  },
+  "navLinks": [
+    {
+      "label": "Work",
+      "href": "/#work"
+    },
+    {
+      "label": "Software",
+      "href": "/software"
+    },
+    {
+      "label": "Creative",
+      "href": "/editing"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    }
+  ],
+  "fork": {
+    "build": {
+      "timecode": "00:00:12:04",
+      "label": "SOFTWARE",
+      "heading": "BUILD",
+      "body": "Building modern web applications and AI-powered products.",
+      "stack": "REACT · NEXT.JS · NODE.JS · POSTGRESQL",
+      "cta": "VIEW SOFTWARE",
+      "href": "/software"
+    },
+    "watch": {
+      "timecode": "00:00:31:18",
+      "label": "CREATIVE",
+      "heading": "WATCH",
+      "body": "Editing performance-focused ads designed to capture attention.",
+      "stack": "UGC · META ADS · VSL · AI CREATIVE",
+      "cta": "VIEW CREATIVE",
+      "href": "/editing"
+    }
+  },
+  "engineering": {
+    "about": [
+      "I'm a software developer and creative professional focused on building practical digital products. My background in video editing and performance marketing gives me a different perspective on software—I don't just think about whether a product works, but also how people experience, understand, and engage with it.",
+      "I'm currently focused on modern full-stack development, building with technologies like React, Next.js, Node.js, databases, and AI integrations."
+    ],
+    "skills": [
+      {
+        "group": "FRONTEND",
+        "items": [
+          "React",
+          "Next.js",
+          "JavaScript",
+          "TypeScript",
+          "HTML / CSS",
+          "Tailwind CSS"
+        ]
+      },
+      {
+        "group": "BACKEND",
+        "items": [
+          "Node.js",
+          "Express",
+          "NestJS",
+          "REST APIs"
+        ]
+      },
+      {
+        "group": "DATABASE & BACKEND SERVICES",
+        "items": [
+          "MongoDB",
+          "PostgreSQL",
+          "Supabase"
+        ]
+      },
+      {
+        "group": "TOOLS",
+        "items": [
+          "Git / GitHub",
+          "VS Code",
+          "API integrations",
+          "AI tools"
+        ]
+      }
+    ],
+    "resume": {
+      "label": "DOWNLOAD RESUME",
+      "href": "#",
+      "note": "TODO: resume PDF URL"
+    }
+  },
+  "editing": {
+    "heading": "I edit ads designed to hold attention.",
+    "subheading": "UGC Ads. VSLs. Meta Ads. Short-Form Content.",
+    "body": "5+ years of experience creating performance-focused video content for brands and eCommerce.",
+    "positioning": "Performance Creative Editor",
+    "emphasis": [
+      "Hooks",
+      "Retention",
+      "Pacing",
+      "Pattern interrupts",
+      "Visual storytelling",
+      "UGC editing",
+      "Meta/Facebook ads",
+      "VSLs",
+      "AI-generated scenes",
+      "Creative testing"
+    ],
+    "categories": [
+      "All Work",
+      "UGC Ads",
+      "Meta Ads",
+      "VSLs",
+      "AI Creative",
+      "Short Form"
+    ],
+    "showreelUrl": "",
+    "showreelNote": "TODO: showreel embed URL",
+    "work": [
+      {
+        "id": "relaxe",
+        "title": "Relaxe — Performance Ad Creative",
+        "category": "UGC Ads",
+        "image": "/reel/frame-01.jpg",
+        "href": "/projects/relaxe-performance-ads"
+      },
+      {
+        "id": "w2",
+        "title": "TODO: Meta ad title",
+        "category": "Meta Ads",
+        "image": "/reel/frame-04.jpg",
+        "href": null
+      },
+      {
+        "id": "w3",
+        "title": "TODO: VSL title",
+        "category": "VSLs",
+        "image": "/reel/frame-06.jpg",
+        "href": null
+      },
+      {
+        "id": "w4",
+        "title": "TODO: AI creative title",
+        "category": "AI Creative",
+        "image": "/reel/frame-08.jpg",
+        "href": null
+      },
+      {
+        "id": "w5",
+        "title": "TODO: short-form title",
+        "category": "Short Form",
+        "image": "/reel/frame-10.jpg",
+        "href": null
+      },
+      {
+        "id": "w6",
+        "title": "TODO: UGC ad title",
+        "category": "UGC Ads",
+        "image": "/reel/frame-12.jpg",
+        "href": null
+      }
+    ]
+  },
+  "bridge": {
+    "timecode": "00:02:14:02",
+    "label": "WHERE CODE MEETS CREATIVE",
+    "heading": "TWO CRAFTS, ONE OPERATOR",
+    "build": {
+      "label": "SOFTWARE HELPS ME",
+      "items": [
+        "Build products",
+        "Understand technical systems",
+        "Work with AI/API integrations",
+        "Create websites and applications"
+      ]
+    },
+    "watch": {
+      "label": "VIDEO EDITING HELPS ME",
+      "items": [
+        "Understand users",
+        "Capture attention",
+        "Communicate complex ideas",
+        "Create marketing assets"
+      ]
+    }
+  },
+  "contact": {
+    "timecode": "00:04:00:00",
+    "label": "END OF REEL",
+    "heading": "LET'S WORK TOGETHER",
+    "email": {
+      "label": "shawona145@gmail.com",
+      "href": "mailto:shawona145@gmail.com"
+    },
+    "socials": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/ShawonAhmed0",
+        "external": true
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://linkedin.com/in/shawonahmedsa",
+        "external": true
+      },
+      {
+        "label": "Email",
+        "href": "mailto:shawona145@gmail.com",
+        "external": false
+      }
+    ],
+    "footerLeft": "SHAWON © 2026",
+    "footerRight": "BUILT WITH NEXT.JS"
+  }
+}

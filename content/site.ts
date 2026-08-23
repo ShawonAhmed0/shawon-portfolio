@@ -1,3 +1,17 @@
+import data from "./data/site.json";
+
+/**
+ * The site's copy lives in `content/data/*.json`, not in this file. This
+ * module is the typed door onto it: every export below has an explicit
+ * annotation, so a JSON import — which TypeScript widens to `string` and
+ * `string[]` — still reaches the pages as a precise shape.
+ *
+ * The split exists so the admin panel at /admin can rewrite the content
+ * without codegen. Editing a TypeScript literal from a form means printing
+ * source; editing JSON means `JSON.stringify`. Nothing that reads from here
+ * changed when the data moved.
+ */
+
 export type NavLink = { label: string; href: string };
 
 export type SkillGroup = { group: string; items: string[] };
@@ -10,19 +24,79 @@ export type EditingWorkItem = {
   href: string | null;
 };
 
-export const site = {
+export type SiteInfo = {
   /** Canonical origin. Every absolute URL the site emits derives from this,
    *  so a domain change is one edit rather than a search across metadata,
    *  the sitemap and robots. */
-  url: "https://shawonahmed.com",
-  name: "Shawon Ahmed",
-  mark: "Shawon Ahmed",
-  title: "Shawon — Software Engineer × Performance Creative",
-  role: "Software Engineer × Performance Creative",
-  intro:
-    "I build modern digital products and create high-performing visual experiences.",
-  year: "2026",
-} as const;
+  url: string;
+  name: string;
+  mark: string;
+  title: string;
+  role: string;
+  intro: string;
+  year: string;
+};
+
+export type Portrait = {
+  src: string;
+  srcDark: string;
+  alt: string;
+  slate: string;
+};
+
+export type ForkPanel = {
+  timecode: string;
+  label: string;
+  heading: string;
+  body: string;
+  stack: string;
+  cta: string;
+  href: string;
+};
+
+export type Engineering = {
+  about: string[];
+  skills: SkillGroup[];
+  resume: { label: string; href: string; note: string };
+};
+
+export type EditingSection = {
+  heading: string;
+  subheading: string;
+  body: string;
+  positioning: string;
+  emphasis: string[];
+  categories: string[];
+  /** A YouTube or Vimeo link. Empty means the showreel slot stays a
+   *  placeholder showing `showreelNote` instead. */
+  showreelUrl: string;
+  showreelNote: string;
+  work: EditingWorkItem[];
+};
+
+export type BridgeColumn = { label: string; items: string[] };
+
+export type Bridge = {
+  timecode: string;
+  label: string;
+  heading: string;
+  build: BridgeColumn;
+  watch: BridgeColumn;
+};
+
+export type SocialLink = { label: string; href: string; external: boolean };
+
+export type Contact = {
+  timecode: string;
+  label: string;
+  heading: string;
+  email: { label: string; href: string };
+  socials: SocialLink[];
+  footerLeft: string;
+  footerRight: string;
+};
+
+export const site: SiteInfo = data.site;
 
 /**
  * Two cutouts of the same head-and-shoulders setup, one per ground: sage knit
@@ -38,198 +112,19 @@ export const site = {
  * from a fresh source, solve for the transform again rather than reusing
  * these numbers — they are specific to this pair.
  */
-export const portrait = {
-  /** Sage knit, lit for paper. */
-  src: "/me/shawon-light-v4.webp",
-  /** Lit for ink. */
-  srcDark: "/me/shawon-v3-dark.webp",
-  alt: "Shawon",
-  slate: "SUBJECT / SHAWON",
-};
+export const portrait: Portrait = data.portrait;
 
-export const navLinks: NavLink[] = [
-  { label: "Work", href: "/#work" },
-  { label: "Software", href: "/software" },
-  { label: "Creative", href: "/editing" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-];
+export const navLinks: NavLink[] = data.navLinks;
 
-export const fork = {
-  build: {
-    timecode: "00:00:12:04",
-    label: "SOFTWARE",
-    heading: "BUILD",
-    body: "Building modern web applications and AI-powered products.",
-    stack: "REACT · NEXT.JS · NODE.JS · POSTGRESQL",
-    cta: "VIEW SOFTWARE",
-    href: "/software",
-  },
-  watch: {
-    timecode: "00:00:31:18",
-    label: "CREATIVE",
-    heading: "WATCH",
-    body: "Editing performance-focused ads designed to capture attention.",
-    stack: "UGC · META ADS · VSL · AI CREATIVE",
-    cta: "VIEW CREATIVE",
-    href: "/editing",
-  },
-} as const;
+export const fork: { build: ForkPanel; watch: ForkPanel } = data.fork;
 
-export const engineering = {
-  about: [
-    "I'm a software developer and creative professional focused on building practical digital products. My background in video editing and performance marketing gives me a different perspective on software—I don't just think about whether a product works, but also how people experience, understand, and engage with it.",
-    "I'm currently focused on modern full-stack development, building with technologies like React, Next.js, Node.js, databases, and AI integrations.",
-  ],
-  skills: [
-    {
-      group: "FRONTEND",
-      items: [
-        "React",
-        "Next.js",
-        "JavaScript",
-        "TypeScript",
-        "HTML / CSS",
-        "Tailwind CSS",
-      ],
-    },
-    { group: "BACKEND", items: ["Node.js", "Express", "NestJS", "REST APIs"] },
-    {
-      group: "DATABASE & BACKEND SERVICES",
-      items: ["MongoDB", "PostgreSQL", "Supabase"],
-    },
-    {
-      group: "TOOLS",
-      items: ["Git / GitHub", "VS Code", "API integrations", "AI tools"],
-    },
-  ] as SkillGroup[],
-  resume: { label: "DOWNLOAD RESUME", href: "#", note: "TODO: resume PDF URL" },
-};
+export const engineering: Engineering = data.engineering;
 
-export const editing = {
-  heading: "I edit ads designed to hold attention.",
-  subheading: "UGC Ads. VSLs. Meta Ads. Short-Form Content.",
-  body: "5+ years of experience creating performance-focused video content for brands and eCommerce.",
-  positioning: "Performance Creative Editor",
-  emphasis: [
-    "Hooks",
-    "Retention",
-    "Pacing",
-    "Pattern interrupts",
-    "Visual storytelling",
-    "UGC editing",
-    "Meta/Facebook ads",
-    "VSLs",
-    "AI-generated scenes",
-    "Creative testing",
-  ],
-  categories: [
-    "All Work",
-    "UGC Ads",
-    "Meta Ads",
-    "VSLs",
-    "AI Creative",
-    "Short Form",
-  ],
-  showreelNote: "TODO: showreel embed URL",
-  work: [
-    {
-      id: "relaxe",
-      title: "Relaxe — Performance Ad Creative",
-      category: "UGC Ads",
-      image: "/reel/frame-01.jpg",
-      href: "/projects/relaxe-performance-ads",
-    },
-    {
-      id: "w2",
-      title: "TODO: Meta ad title",
-      category: "Meta Ads",
-      image: "/reel/frame-04.jpg",
-      href: null,
-    },
-    {
-      id: "w3",
-      title: "TODO: VSL title",
-      category: "VSLs",
-      image: "/reel/frame-06.jpg",
-      href: null,
-    },
-    {
-      id: "w4",
-      title: "TODO: AI creative title",
-      category: "AI Creative",
-      image: "/reel/frame-08.jpg",
-      href: null,
-    },
-    {
-      id: "w5",
-      title: "TODO: short-form title",
-      category: "Short Form",
-      image: "/reel/frame-10.jpg",
-      href: null,
-    },
-    {
-      id: "w6",
-      title: "TODO: UGC ad title",
-      category: "UGC Ads",
-      image: "/reel/frame-12.jpg",
-      href: null,
-    },
-  ] as EditingWorkItem[],
-};
+export const editing: EditingSection = data.editing;
 
-export const bridge = {
-  timecode: "00:02:14:02",
-  label: "WHERE CODE MEETS CREATIVE",
-  heading: "TWO CRAFTS, ONE OPERATOR",
-  build: {
-    label: "SOFTWARE HELPS ME",
-    items: [
-      "Build products",
-      "Understand technical systems",
-      "Work with AI/API integrations",
-      "Create websites and applications",
-    ],
-  },
-  watch: {
-    label: "VIDEO EDITING HELPS ME",
-    items: [
-      "Understand users",
-      "Capture attention",
-      "Communicate complex ideas",
-      "Create marketing assets",
-    ],
-  },
-};
+export const bridge: Bridge = data.bridge;
 
-export const contact = {
-  timecode: "00:04:00:00",
-  label: "END OF REEL",
-  heading: "LET'S WORK TOGETHER",
-  email: {
-    label: "shawona145@gmail.com",
-    href: "mailto:shawona145@gmail.com",
-  },
-  socials: [
-    {
-      label: "GitHub",
-      href: "https://github.com/ShawonAhmed0",
-      external: true,
-    },
-    {
-      label: "LinkedIn",
-      href: "https://linkedin.com/in/shawonahmedsa",
-      external: true,
-    },
-    {
-      label: "Email",
-      href: "mailto:shawona145@gmail.com",
-      external: false,
-    },
-  ],
-  footerLeft: "SHAWON © 2026",
-  footerRight: "BUILT WITH NEXT.JS",
-};
+export const contact: Contact = data.contact;
 
 export const reelFrames: string[] = Array.from(
   { length: 12 },
@@ -238,6 +133,11 @@ export const reelFrames: string[] = Array.from(
 
 export type SectionMark = { code: string; label: string };
 
+/**
+ * Structural, not copy: these keys are wired to section ids in the page
+ * components, so they stay in source rather than moving to the editable
+ * JSON where a rename would silently unhook a mark from its section.
+ */
 export const pageMarks: Record<string, Record<string, SectionMark>> = {
   software: {
     hero: { code: "00:00:12:04", label: "SOFTWARE" },

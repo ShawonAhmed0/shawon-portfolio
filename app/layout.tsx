@@ -7,13 +7,7 @@ import {
   Noto_Sans_Bengali,
 } from "next/font/google";
 import "./globals.css";
-import IntroCurtain from "@/components/IntroCurtain";
-import GradeFilters from "@/components/GradeFilters";
-import GradePanel from "@/components/GradePanel";
-import Timeline from "@/components/Timeline";
-import Tilt from "@/components/Tilt";
-import RenderEgg from "@/components/RenderEgg";
-import PlayheadCursor from "@/components/PlayheadCursor";
+import SiteChrome from "@/components/SiteChrome";
 import { site } from "@/content/site";
 
 // Modern variable grotesque. Tight tracking at display weight is what reads
@@ -115,31 +109,7 @@ export default function RootLayout({
               "try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.dataset.theme=t}}catch(e){}",
           }}
         />
-        <IntroCurtain />
-        <GradeFilters />
-
-        {/*
-          The grade stage. Only the page content sits inside it, for two
-          reasons: a `filter` makes an element the containing block for fixed
-          descendants, which would peel the timeline and cursor off the
-          viewport; and the chrome should stay neutral anyway, the way the UI
-          of a grading suite is never itself graded.
-        */}
-        <div className="grade-stage">{children}</div>
-        {/*
-          soft-light, not overlay: against a near-black ground, overlay
-          multiplies the noise down to nothing. soft-light lifts it into
-          visible texture.
-        */}
-        <div
-          aria-hidden
-          className="grain pointer-events-none fixed inset-0 z-[60] opacity-[0.05] mix-blend-multiply"
-        />
-        <Timeline />
-        <Tilt />
-        <RenderEgg />
-        <PlayheadCursor />
-        <GradePanel />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

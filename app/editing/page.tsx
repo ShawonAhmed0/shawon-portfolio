@@ -4,6 +4,7 @@ import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
+import { embedUrl } from "@/lib/embed";
 import { editing, pageMarks, site } from "@/content/site";
 import { experience } from "@/content/experience";
 import { services } from "@/content/services";
@@ -17,6 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default function EditingPage() {
+  // Resolved once here rather than in the markup: null is the signal that
+  // no usable link is set, and the placeholder is what should render then.
+  const showreel = embedUrl(editing.showreelUrl);
+
   const editingExperience = experience.filter((row) => row.accent === "watch");
 
   return (
@@ -81,12 +86,29 @@ export default function EditingPage() {
             />
           </FadeIn>
           <FadeIn delay={0.1}>
-            <div
-              data-playhead
-              className="panel ground-watch flex aspect-video w-full items-center justify-center"
-            >
-              <p className="t-label">{editing.showreelNote}</p>
-            </div>
+            {showreel ? (
+              <div
+                data-playhead
+                className="panel ground-watch aspect-video w-full overflow-hidden"
+              >
+                <iframe
+                  src={showreel}
+                  title="Showreel"
+                  className="h-full w-full border-0"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div
+                data-playhead
+                className="panel ground-watch flex aspect-video w-full items-center justify-center"
+              >
+                <p className="t-label">{editing.showreelNote}</p>
+              </div>
+            )}
           </FadeIn>
         </div>
       </section>
