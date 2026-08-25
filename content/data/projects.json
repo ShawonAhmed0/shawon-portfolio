@@ -33,24 +33,24 @@
     "media": [
       {
         "src": "/work/hishabai-1.jpg",
-        "alt": "TODO: HishabAI screenshot 1",
+        "alt": "HishabAI Bengali bookkeeping dashboard with cash, income, expense, profit, and stock summaries",
         "playhead": false
       },
       {
         "src": "/work/hishabai-2.jpg",
-        "alt": "TODO: HishabAI screenshot 2",
+        "alt": "HishabAI transaction ledger with filters and recent business entries",
         "playhead": false
       },
       {
         "src": "/work/hishabai-3.jpg",
-        "alt": "TODO: HishabAI screenshot 3",
+        "alt": "HishabAI inventory view with stock value, product counts, and low-stock status",
         "playhead": false
       }
     ],
     "links": [
       {
-        "label": "TODO: live URL",
-        "href": "#"
+        "label": "View live demo",
+        "href": "https://hishab-ai-web.vercel.app/"
       }
     ]
   },
@@ -94,24 +94,24 @@
     "media": [
       {
         "src": "/work/aid-for-men-1.jpg",
-        "alt": "TODO: Aid For Men screenshot 1",
+        "alt": "Aid For Men website homepage with navigation, campaign photography, and call to action",
         "playhead": false
       },
       {
         "src": "/work/aid-for-men-2.jpg",
-        "alt": "TODO: Aid For Men screenshot 2",
+        "alt": "Aid For Men archive interface with media filters and search",
         "playhead": false
       },
       {
         "src": "/work/aid-for-men-3.jpg",
-        "alt": "TODO: Aid For Men screenshot 3",
+        "alt": "Responsive Aid For Men About page with organization branding and campaign photography",
         "playhead": false
       }
     ],
     "links": [
       {
-        "label": "TODO: live URL",
-        "href": "#"
+        "label": "Visit live website",
+        "href": "https://aidformen.vercel.app/"
       }
     ]
   },
@@ -145,17 +145,17 @@
     "media": [
       {
         "src": "/work/relaxe-performance-ads-1.jpg",
-        "alt": "TODO: Relaxe frame 1",
+        "alt": "Unbranded relaxation product in a bright spa setting",
         "playhead": true
       },
       {
         "src": "/work/relaxe-performance-ads-2.jpg",
-        "alt": "TODO: Relaxe frame 2",
+        "alt": "UGC-style product demonstration in a bright living room",
         "playhead": true
       },
       {
         "src": "/work/relaxe-performance-ads-3.jpg",
-        "alt": "TODO: Relaxe frame 3",
+        "alt": "Vertical performance-ad product frame with warm fabric movement",
         "playhead": true
       }
     ],
@@ -196,17 +196,17 @@
     "media": [
       {
         "src": "/work/movie-discovery-1.jpg",
-        "alt": "TODO: Movie Discovery screenshot 1",
+        "alt": "Bright modern cinema lobby representing the movie discovery experience",
         "playhead": false
       },
       {
         "src": "/work/movie-discovery-2.jpg",
-        "alt": "TODO: Movie Discovery screenshot 2",
+        "alt": "Close-up of a 35mm film strip in warm daylight",
         "playhead": false
       },
       {
         "src": "/work/movie-discovery-3.jpg",
-        "alt": "TODO: Movie Discovery screenshot 3",
+        "alt": "Vintage film projector beside a sunlit window",
         "playhead": false
       }
     ],
