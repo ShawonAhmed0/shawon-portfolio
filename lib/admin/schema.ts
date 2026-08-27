@@ -352,6 +352,7 @@ export function parseExperience(input: unknown, c = new Check()): ExperienceRow[
     const o = c.obj(`experience[${i}]`, item);
     return {
       period: c.str(`experience[${i}].period`, o.period),
+      employment: c.str(`experience[${i}].employment`, o.employment, { allowEmpty: true }),
       accent: c.accent(`experience[${i}].accent`, o.accent),
       title: c.str(`experience[${i}].title`, o.title),
       tags: c.strList(`experience[${i}].tags`, o.tags),

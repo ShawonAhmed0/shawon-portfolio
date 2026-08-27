@@ -224,6 +224,11 @@ export default function EditingPage() {
                 style={{ color: "var(--watch)" }}
               >
                 {row.period}
+                {row.employment ? (
+                  <span className="mt-1 block text-[11px] tracking-[0.1em] text-[var(--faint)] uppercase">
+                    {row.employment}
+                  </span>
+                ) : null}
               </p>
               <div>
                 <h3 className="t-h3 text-[var(--bone)]">{row.title}</h3>

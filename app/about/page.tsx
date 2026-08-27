@@ -80,6 +80,11 @@ export default function AboutPage() {
                 style={{ color: `var(--${row.accent})` }}
               >
                 {row.period}
+                {row.employment ? (
+                  <span className="mt-1 block text-[11px] tracking-[0.1em] text-[var(--faint)] uppercase">
+                    {row.employment}
+                  </span>
+                ) : null}
               </p>
               <div>
                 <h2 className="t-h3 text-[var(--bone)]">{row.title}</h2>

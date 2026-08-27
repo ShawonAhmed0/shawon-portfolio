@@ -588,7 +588,13 @@ export function ExperienceSection({
       <Repeater
         items={value}
         onChange={onChange}
-        blank={() => ({ period: "2026 — PRESENT", accent: "build" as const, title: "New role", tags: [] })}
+        blank={() => ({
+          period: "2026 — PRESENT",
+          employment: "",
+          accent: "build" as const,
+          title: "New role",
+          tags: [],
+        })}
         title={(item) => item.title}
         addLabel="Add row"
         render={(item, update) => (
@@ -602,6 +608,12 @@ export function ExperienceSection({
                 options={ACCENTS}
               />
             </div>
+            <Text
+              label="Employment"
+              value={item.employment}
+              onChange={(employment) => update({ employment })}
+              hint='Full-time, Part-time, Freelance. Leave empty to hide it.'
+            />
             <Text label="Title" value={item.title} onChange={(title) => update({ title })} />
             <StringList
               label="Tags"
