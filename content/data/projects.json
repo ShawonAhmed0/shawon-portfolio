@@ -32,18 +32,18 @@
     "architecture": "TODO: architecture notes for HishabAI",
     "media": [
       {
-        "src": "/work/hishabai-1.jpg",
-        "alt": "HishabAI Bengali bookkeeping dashboard with cash, income, expense, profit, and stock summaries",
+        "src": "/work/hishabai-1.png",
+        "alt": "HishabAI English bookkeeping dashboard with cash, income, expense, profit, and stock summaries",
         "playhead": false
       },
       {
-        "src": "/work/hishabai-2.jpg",
-        "alt": "HishabAI transaction ledger with filters and recent business entries",
+        "src": "/work/hishabai-2.png",
+        "alt": "HishabAI English transaction ledger with filters and recent business entries",
         "playhead": false
       },
       {
-        "src": "/work/hishabai-3.jpg",
-        "alt": "HishabAI inventory view with stock value, product counts, and low-stock status",
+        "src": "/work/hishabai-3.png",
+        "alt": "HishabAI English inventory view with stock value, product counts, and low-stock status",
         "playhead": false
       }
     ],
@@ -144,18 +144,18 @@
     "architecture": "TODO: creative structure notes for Relaxe",
     "media": [
       {
-        "src": "/work/relaxe-performance-ads-1.jpg",
-        "alt": "Unbranded relaxation product in a bright spa setting",
+        "src": "/work/relaxe-performance-ads-1.webp",
+        "alt": "UGC creator holding a Relaxe pocket device with an I couldn't switch off performance-ad hook",
         "playhead": true
       },
       {
-        "src": "/work/relaxe-performance-ads-2.jpg",
-        "alt": "UGC-style product demonstration in a bright living room",
+        "src": "/work/relaxe-performance-ads-2.webp",
+        "alt": "Relaxe UGC testimonial with a 30-second reset hook, subtitles, and motion graphics",
         "playhead": true
       },
       {
-        "src": "/work/relaxe-performance-ads-3.jpg",
-        "alt": "Vertical performance-ad product frame with warm fabric movement",
+        "src": "/work/relaxe-performance-ads-3.webp",
+        "alt": "Relaxe seven-day review UGC creative with a product highlight and captions",
         "playhead": true
       }
     ],
@@ -195,18 +195,18 @@
     "architecture": "TODO: architecture notes for Movie Discovery App",
     "media": [
       {
-        "src": "/work/movie-discovery-1.jpg",
-        "alt": "Bright modern cinema lobby representing the movie discovery experience",
+        "src": "/work/movie-discovery-1.webp",
+        "alt": "CineFind movie discovery home screen featuring The Last Signal",
         "playhead": false
       },
       {
-        "src": "/work/movie-discovery-2.jpg",
-        "alt": "Close-up of a 35mm film strip in warm daylight",
+        "src": "/work/movie-discovery-2.webp",
+        "alt": "CineFind popular movie browsing grid with six fictional film cards",
         "playhead": false
       },
       {
-        "src": "/work/movie-discovery-3.jpg",
-        "alt": "Vintage film projector beside a sunlit window",
+        "src": "/work/movie-discovery-3.webp",
+        "alt": "CineFind Shadow Line movie detail screen with rating, synopsis, and trailer controls",
         "playhead": false
       }
     ],

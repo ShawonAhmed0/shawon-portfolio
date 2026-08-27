@@ -81,7 +81,7 @@ export default function WorkCard({ project, featured = false }: WorkCardProps) {
             loading="lazy"
             decoding="async"
             {...(frame.playhead ? { "data-playhead": true } : {})}
-            className={`scrub-frame ${featured ? "aspect-[21/9]" : "aspect-[4/3]"}`}
+            className={`scrub-frame ${featured ? "aspect-[21/9]" : "aspect-video"}`}
             data-shown={i === index || undefined}
           />
         ))}

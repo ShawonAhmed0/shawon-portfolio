@@ -255,7 +255,7 @@ export default async function ProjectPage({ params }: PageProps) {
               <div
                 key={item.src}
                 {...(item.playhead ? { "data-playhead": true } : {})}
-                className="frame aspect-[4/3] w-full"
+                className="frame aspect-video w-full"
               >
                 <img
                   src={item.src}
