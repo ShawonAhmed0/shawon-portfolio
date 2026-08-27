@@ -312,6 +312,39 @@ export function CreativeSection({
         <Text label="Subheading" value={ed.subheading} onChange={(subheading) => set({ subheading })} />
         <Area label="Body" value={ed.body} onChange={(body) => set({ body })} rows={3} />
         <Text label="Positioning" value={ed.positioning} onChange={(positioning) => set({ positioning })} />
+        <div className="ad-row ad-row-2">
+          <Text
+            label="Credential"
+            value={ed.credential.label}
+            onChange={(label) => set({ credential: { ...ed.credential, label } })}
+            hint="e.g. Top Rated on Upwork. Leave both empty to hide it."
+          />
+          <Text
+            label="Credential link"
+            value={ed.credential.href}
+            onChange={(href) => set({ credential: { ...ed.credential, href } })}
+          />
+        </div>
+        <div className="ad-field">
+          <span className="ad-label">Credential figures</span>
+          <span className="ad-hint">
+            Copy these from the source exactly, using its own wording. An
+            unverifiable number on a portfolio is worse than no number.
+          </span>
+          <Repeater
+            items={ed.credential.stats}
+            onChange={(stats) => set({ credential: { ...ed.credential, stats } })}
+            blank={() => ({ value: "", label: "" })}
+            title={(item) => `${item.value} ${item.label}`.trim() || "New figure"}
+            addLabel="Add figure"
+            render={(item, update) => (
+              <div className="ad-row ad-row-2">
+                <Text label="Value" value={item.value} onChange={(value) => update({ value })} />
+                <Text label="Label" value={item.label} onChange={(label) => update({ label })} />
+              </div>
+            )}
+          />
+        </div>
         <StringList
           label="Emphasis tags"
           value={ed.emphasis}
@@ -333,6 +366,54 @@ export function CreativeSection({
           value={ed.showreelNote}
           onChange={(showreelNote) => set({ showreelNote })}
           hint="Only visible while no video link is set."
+        />
+      </Card>
+
+      <Card title="Client feedback">
+        <p className="ad-hint">
+          Quote reviews exactly as they were written, including any awkward
+          phrasing. A tidied-up quote is no longer a quote, and naming the
+          source is what makes it checkable.
+        </p>
+        <Repeater
+          items={ed.testimonials}
+          onChange={(testimonials) => set({ testimonials })}
+          blank={() => ({ quote: "", author: "", context: "", date: "", source: "Upwork" })}
+          title={(item) => item.author || item.quote.slice(0, 40) || "New review"}
+          addLabel="Add review"
+          render={(item, update) => (
+            <>
+              <Area
+                label="Quote"
+                value={item.quote}
+                onChange={(quote) => update({ quote })}
+                rows={4}
+                hint="Without surrounding quote marks — the page adds those."
+              />
+              <div className="ad-row ad-row-2">
+                <Text
+                  label="Author"
+                  value={item.author}
+                  onChange={(author) => update({ author })}
+                  hint='Leave empty to show "Upwork client".'
+                />
+                <Text
+                  label="Source"
+                  value={item.source}
+                  onChange={(source) => update({ source })}
+                />
+              </div>
+              <div className="ad-row ad-row-2">
+                <Text
+                  label="Project"
+                  value={item.context}
+                  onChange={(context) => update({ context })}
+                  hint="What the job was."
+                />
+                <Text label="Date" value={item.date} onChange={(date) => update({ date })} />
+              </div>
+            </>
+          )}
         />
       </Card>
 

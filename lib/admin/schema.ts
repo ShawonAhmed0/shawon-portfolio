@@ -245,10 +245,34 @@ export function parseSite(input: unknown, c = new Check()): SiteData {
       subheading: c.str("site.editing.subheading", ed.subheading),
       body: c.str("site.editing.body", ed.body),
       positioning: c.str("site.editing.positioning", ed.positioning),
+      credential: (() => {
+        const cr = c.obj("site.editing.credential", ed.credential);
+        return {
+          label: c.str("site.editing.credential.label", cr.label, { allowEmpty: true }),
+          href: c.href("site.editing.credential.href", cr.href, { allowEmpty: true }),
+          stats: c.arr("site.editing.credential.stats", cr.stats).map((item, i) => {
+            const st = c.obj(`site.editing.credential.stats[${i}]`, item);
+            return {
+              value: c.str(`site.editing.credential.stats[${i}].value`, st.value),
+              label: c.str(`site.editing.credential.stats[${i}].label`, st.label),
+            };
+          }),
+        };
+      })(),
       emphasis: c.strList("site.editing.emphasis", ed.emphasis),
       categories: c.strList("site.editing.categories", ed.categories),
       showreelUrl: c.href("site.editing.showreelUrl", ed.showreelUrl, { allowEmpty: true }),
       showreelNote: c.str("site.editing.showreelNote", ed.showreelNote, { allowEmpty: true }),
+      testimonials: c.arr("site.editing.testimonials", ed.testimonials).map((item, i) => {
+        const t = c.obj(`site.editing.testimonials[${i}]`, item);
+        return {
+          quote: c.str(`site.editing.testimonials[${i}].quote`, t.quote),
+          author: c.str(`site.editing.testimonials[${i}].author`, t.author, { allowEmpty: true }),
+          context: c.str(`site.editing.testimonials[${i}].context`, t.context, { allowEmpty: true }),
+          date: c.str(`site.editing.testimonials[${i}].date`, t.date, { allowEmpty: true }),
+          source: c.str(`site.editing.testimonials[${i}].source`, t.source, { allowEmpty: true }),
+        };
+      }),
       work: c.arr("site.editing.work", ed.work).map((item, i) => {
         const w = c.obj(`site.editing.work[${i}]`, item);
         return {

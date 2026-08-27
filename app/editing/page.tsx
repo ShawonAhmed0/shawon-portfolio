@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowUpRight } from "lucide-react";
 import EditingFilter from "@/components/EditingFilter";
 import FadeIn from "@/components/FadeIn";
 import HeroCanvas from "@/components/HeroCanvas";
@@ -6,7 +7,7 @@ import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
 import { pageMetadata } from "@/lib/seo";
 import { embedUrl } from "@/lib/embed";
-import { real } from "@/lib/placeholder";
+import { real, realHref } from "@/lib/placeholder";
 import { editing, pageMarks } from "@/content/site";
 import { experience } from "@/content/experience";
 import { services } from "@/content/services";
@@ -25,6 +26,10 @@ export default function EditingPage() {
   // no usable link is set, and the placeholder is what should render then.
   const showreel = embedUrl(editing.showreelUrl);
   const showreelNote = real(editing.showreelNote);
+  const testimonials = editing.testimonials.filter((t) => real(t.quote));
+  const credential = real(editing.credential.label) && realHref(editing.credential.href)
+    ? editing.credential
+    : null;
 
   const editingExperience = experience.filter((row) => row.accent === "watch");
 
@@ -72,6 +77,40 @@ export default function EditingPage() {
             <p className="t-label">POSITIONING</p>
             <p className="t-lead mt-2">{editing.positioning}</p>
           </FadeIn>
+
+          {/* Third-party proof, which is the one thing a portfolio cannot
+              assert about itself. Rendered only when it has been filled in. */}
+          {credential ? (
+            <FadeIn delay={0.75} onMount className="mt-10">
+              <a
+                href={credential.href}
+                target="_blank"
+                rel="noreferrer"
+                className="rule-grow inline-flex items-center gap-2 text-[var(--bone)]"
+              >
+                <span className="t-label" style={{ color: "var(--watch)" }}>
+                  {credential.label}
+                </span>
+                <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+              </a>
+              {credential.stats.length > 0 ? (
+                <dl className="mt-5 flex flex-wrap gap-x-10 gap-y-5">
+                  {credential.stats.map((stat) => (
+                    <div key={stat.label}>
+                      <dt className="sr-only">{stat.label}</dt>
+                      <dd
+                        className="t-h3 m-0 text-[var(--bone)]"
+                        style={{ fontVariantNumeric: "tabular-nums" }}
+                      >
+                        {stat.value}
+                      </dd>
+                      <p className="t-label mt-1">{stat.label}</p>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
+            </FadeIn>
+          ) : null}
         </div>
       </section>
 
@@ -159,6 +198,66 @@ export default function EditingPage() {
           </FadeIn>
         </div>
       </section>
+
+      {/* CLIENT FEEDBACK */}
+      {testimonials.length > 0 ? (
+        <section
+          data-timecode={MARK.testimonials.code}
+          data-timecode-label="CLIENT FEEDBACK"
+          className={`py-20 md:py-28 ${PAD}`}
+        >
+          <div className="shell">
+            <FadeIn>
+              <Timecode
+                code={MARK.testimonials.code}
+                label={MARK.testimonials.label}
+                accent="watch"
+              />
+            </FadeIn>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              {testimonials.map((item, i) => (
+                <FadeIn key={item.quote} delay={i * 0.05}>
+                  {/* blockquote/cite rather than styled divs: this is a real
+                      quotation from someone else, and the markup should say so. */}
+                  <figure className="panel ground-watch m-0 flex h-full flex-col p-7 md:p-8">
+                    <blockquote className="t-lead m-0 text-[var(--bone)]">
+                      &ldquo;{item.quote}&rdquo;
+                    </blockquote>
+                    <figcaption className="mt-auto pt-7">
+                      <p className="t-label" style={{ color: "var(--watch)" }}>
+                        {item.author || "Upwork client"}
+                      </p>
+                      {item.context ? (
+                        <p className="t-body mt-2 text-[var(--muted)]">{item.context}</p>
+                      ) : null}
+                      {item.date || item.source ? (
+                        <p className="t-label mt-3">
+                          {[item.source, item.date].filter(Boolean).join(" · ")}
+                        </p>
+                      ) : null}
+                    </figcaption>
+                  </figure>
+                </FadeIn>
+              ))}
+            </div>
+
+            {credential ? (
+              <FadeIn delay={0.2} className="mt-8">
+                <a
+                  href={credential.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rule-grow inline-flex items-center gap-2 text-[var(--bone)]"
+                >
+                  <span className="t-label">Read all reviews on Upwork</span>
+                  <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+                </a>
+              </FadeIn>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       {/* SERVICES */}
       <section

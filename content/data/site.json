@@ -111,6 +111,28 @@
     "subheading": "UGC Ads. VSLs. Meta Ads. Short-Form Content.",
     "body": "5+ years of experience creating performance-focused video content for brands and eCommerce.",
     "positioning": "Video Editor · Performance Creative",
+    "credential": {
+      "label": "Top Rated on Upwork",
+      "href": "https://www.upwork.com/freelancers/~013090f113e85ce081",
+      "stats": [
+        {
+          "value": "100%",
+          "label": "Job Success"
+        },
+        {
+          "value": "5.0",
+          "label": "Average rating"
+        },
+        {
+          "value": "37",
+          "label": "Total jobs"
+        },
+        {
+          "value": "884",
+          "label": "Total hours"
+        }
+      ]
+    },
     "emphasis": [
       "Hooks",
       "Retention",
@@ -176,6 +198,22 @@
         "image": "/reel/frame-12.jpg",
         "href": null
       }
+    ],
+    "testimonials": [
+      {
+        "quote": "Shawon and lead from Cluecut are great to work with. Communication is always smooth, edits are quick and deliverables met our needs!",
+        "author": "Imad C.",
+        "context": "Video Editor for High-Impact Social Media Ads (Meta, YouTube, TikTok)",
+        "date": "July 18, 2025",
+        "source": "Upwork"
+      },
+      {
+        "quote": "Love his work! Great hire! Appreciate him very much. Reliable, Punctual, Responsive and follows directions really well. Will work with him again for sure.",
+        "author": "Disrupt Equity",
+        "context": "Real Estate Video Editing Short Form",
+        "date": "July 13, 2023",
+        "source": "Upwork"
+      }
     ]
   },
   "bridge": {
@@ -218,6 +256,11 @@
       {
         "label": "LinkedIn",
         "href": "https://linkedin.com/in/shawonahmedsa",
+        "external": true
+      },
+      {
+        "label": "Upwork",
+        "href": "https://www.upwork.com/freelancers/~013090f113e85ce081",
         "external": true
       },
       {

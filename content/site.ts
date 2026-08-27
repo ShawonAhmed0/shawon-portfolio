@@ -65,13 +65,35 @@ export type EditingSection = {
   subheading: string;
   body: string;
   positioning: string;
+  /** An external credential shown under the positioning line, with the
+   *  figures that back it. An empty label hides the whole block, and an
+   *  empty `stats` hides just the figures — nothing is asserted unless it
+   *  has been filled in. */
+  credential: {
+    label: string;
+    href: string;
+    stats: { value: string; label: string }[];
+  };
   emphasis: string[];
   categories: string[];
   /** A YouTube or Vimeo link. Empty means the showreel slot stays a
    *  placeholder showing `showreelNote` instead. */
   showreelUrl: string;
   showreelNote: string;
+  /** Empty list hides the section entirely. */
+  testimonials: Testimonial[];
   work: EditingWorkItem[];
+};
+
+export type Testimonial = {
+  quote: string;
+  /** May be empty — clients often review without a public name. */
+  author: string;
+  /** What the work was, so the quote has something to attach to. */
+  context: string;
+  date: string;
+  /** Where it was left, e.g. "Upwork". Named so the claim is checkable. */
+  source: string;
 };
 
 export type BridgeColumn = { label: string; items: string[] };
@@ -143,6 +165,7 @@ export const pageMarks: Record<string, Record<string, SectionMark>> = {
     hero: { code: "00:00:12:04", label: "SOFTWARE" },
     about: { code: "00:00:26:11", label: "ABOUT" },
     skills: { code: "00:00:48:02", label: "STACK" },
+    experience: { code: "00:01:01:08", label: "TIMELINE" },
     projects: { code: "00:01:14:19", label: "PROJECTS" },
     resume: { code: "00:01:38:06", label: "DOCUMENTS" },
   },
@@ -150,6 +173,7 @@ export const pageMarks: Record<string, Record<string, SectionMark>> = {
     hero: { code: "00:00:31:18", label: "CREATIVE" },
     showreel: { code: "00:00:44:09", label: "SHOWREEL" },
     work: { code: "00:01:02:15", label: "SELECTED WORK" },
+    testimonials: { code: "00:01:48:06", label: "CLIENT FEEDBACK" },
     services: { code: "00:02:20:04", label: "SERVICES" },
     experience: { code: "00:03:06:19", label: "TIMELINE" },
   },

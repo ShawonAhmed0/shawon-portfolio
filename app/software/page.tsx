@@ -7,6 +7,7 @@ import FadeIn from "@/components/FadeIn";
 import SiteNav from "@/components/SiteNav";
 import Timecode from "@/components/Timecode";
 import { engineering, fork, pageMarks } from "@/content/site";
+import { experience } from "@/content/experience";
 import { projects } from "@/content/projects";
 
 const PAD = "px-5 sm:px-8 md:px-12 lg:px-16";
@@ -22,6 +23,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function SoftwarePage() {
   const resumeHref = realHref(engineering.resume.href);
+  const softwareExperience = experience.filter((row) => row.accent === "build");
 
   const buildProjects = projects.filter((p) => p.accent === "build");
 
@@ -139,6 +141,61 @@ export default function SoftwarePage() {
           </div>
         </div>
       </section>
+
+      {/* EXPERIENCE */}
+      {softwareExperience.length > 0 ? (
+        <section
+          data-timecode={MARK.experience.code}
+          data-timecode-label="TIMELINE"
+          className={`py-20 md:py-28 ${PAD}`}
+        >
+          <div className="shell">
+            <FadeIn>
+              <Timecode
+                code={MARK.experience.code}
+                label={MARK.experience.label}
+                accent="build"
+              />
+            </FadeIn>
+
+            {softwareExperience.map((row) => (
+              <FadeIn
+                key={row.title}
+                className="grid gap-6 py-10 md:grid-cols-[180px_1fr]"
+              >
+                <p
+                  className="font-mono text-[13px]"
+                  style={{ color: "var(--build)" }}
+                >
+                  {row.period}
+                  {row.employment ? (
+                    <span className="mt-1 block text-[11px] tracking-[0.1em] text-[var(--faint)] uppercase">
+                      {row.employment}
+                    </span>
+                  ) : null}
+                </p>
+                <div>
+                  <h3 className="t-h3 text-[var(--bone)]">{row.title}</h3>
+                  <ul className="mt-6 flex flex-wrap gap-2">
+                    {row.tags.map((tag) => (
+                      <li
+                        key={tag}
+                        className="rounded-[var(--pill)] px-3 py-1.5 text-[11px] font-medium"
+                        style={{
+                          color: "var(--muted)",
+                          background: "var(--surface-2)",
+                        }}
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {/* PROJECTS */}
       <section
