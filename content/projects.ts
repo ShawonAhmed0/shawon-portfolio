@@ -13,6 +13,11 @@ export type ProjectMedia = {
   playhead: boolean;
 };
 
+export type DemoAccess = {
+  email: string;
+  password: string;
+};
+
 export type Project = {
   slug: string;
   index: string;
@@ -23,6 +28,7 @@ export type Project = {
   cardLine: string;
   accent: Accent;
   meta: { role: string; type: string; stack: string };
+  demoAccess: DemoAccess | null;
   problem: string;
   solution: string;
   solutionPoints: string[];

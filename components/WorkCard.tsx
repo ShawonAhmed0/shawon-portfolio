@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Accent, Project } from "@/content/projects";
-import { real } from "@/lib/placeholder";
+import { real, realHref } from "@/lib/placeholder";
 
 const ACCENT_VAR: Record<Accent, string> = {
   build: "var(--build)",
@@ -31,6 +31,7 @@ type WorkCardProps = {
  */
 export default function WorkCard({ project, featured = false }: WorkCardProps) {
   const frames = project.media;
+  const liveLink = project.links.find((link) => realHref(link.href));
   const [index, setIndex] = useState(0);
   const [armed, setArmed] = useState(false);
   const zoneRef = useRef<HTMLDivElement>(null);
@@ -48,56 +49,61 @@ export default function WorkCard({ project, featured = false }: WorkCardProps) {
   );
 
   return (
-    <Link
-      href={`/projects/${project.slug}`}
+    <article
       className={`panel tilt group flex flex-col overflow-hidden ${
         featured ? "md:col-span-2" : ""
       }`}
     >
-      <div
-        ref={zoneRef}
-        className="scrub-zone"
-        style={{ background: "var(--surface-2)" }}
-        onPointerEnter={(e) => {
-          if (e.pointerType !== "mouse") return;
-          setArmed(true);
-          scrub(e.clientX);
-        }}
-        onPointerMove={(e) => {
-          if (e.pointerType !== "mouse") return;
-          scrub(e.clientX);
-        }}
-        onPointerLeave={() => {
-          setArmed(false);
-          setIndex(0);
-        }}
+      <Link
+        href={`/projects/${project.slug}`}
+        aria-label={`View ${project.name} case study`}
+        className="block focus-visible:outline-2 focus-visible:outline-offset-[-3px]"
       >
-        {frames.map((frame, i) => (
-          <img
-            key={frame.src}
-            src={armed || i === 0 ? frame.src : undefined}
-            alt={i === 0 ? frame.alt : ""}
-            aria-hidden={i !== 0 || undefined}
-            loading="lazy"
-            decoding="async"
-            {...(frame.playhead ? { "data-playhead": true } : {})}
-            className={`scrub-frame ${featured ? "aspect-[21/9]" : "aspect-video"}`}
-            data-shown={i === index || undefined}
-          />
-        ))}
+        <div
+          ref={zoneRef}
+          className="scrub-zone"
+          style={{ background: "var(--surface-2)" }}
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            setArmed(true);
+            scrub(e.clientX);
+          }}
+          onPointerMove={(e) => {
+            if (e.pointerType !== "mouse") return;
+            scrub(e.clientX);
+          }}
+          onPointerLeave={() => {
+            setArmed(false);
+            setIndex(0);
+          }}
+        >
+          {frames.map((frame, i) => (
+            <img
+              key={frame.src}
+              src={armed || i === 0 ? frame.src : undefined}
+              alt={i === 0 ? frame.alt : ""}
+              aria-hidden={i !== 0 || undefined}
+              loading="lazy"
+              decoding="async"
+              {...(frame.playhead ? { "data-playhead": true } : {})}
+              className={`scrub-frame ${featured ? "aspect-[21/9]" : "aspect-video"}`}
+              data-shown={i === index || undefined}
+            />
+          ))}
 
-        {frames.length > 1 ? (
-          <div aria-hidden className="scrub-strip" data-armed={armed || undefined}>
-            {frames.map((frame, i) => (
-              <span
-                key={frame.src}
-                className="scrub-tick"
-                data-on={i === index || undefined}
-              />
-            ))}
-          </div>
-        ) : null}
-      </div>
+          {frames.length > 1 ? (
+            <div aria-hidden className="scrub-strip" data-armed={armed || undefined}>
+              {frames.map((frame, i) => (
+                <span
+                  key={frame.src}
+                  className="scrub-tick"
+                  data-on={i === index || undefined}
+                />
+              ))}
+            </div>
+          ) : null}
+        </div>
+      </Link>
 
       <div className="flex flex-1 flex-col gap-3 p-6 md:p-7">
         <div className="flex items-start justify-between gap-4">
@@ -145,7 +151,29 @@ export default function WorkCard({ project, featured = false }: WorkCardProps) {
             </span>
           ) : null}
         </div>
+
+        <div className="flex flex-wrap gap-2 pt-2">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="inline-flex items-center gap-2 rounded-[var(--pill)] border border-[var(--line)] bg-[var(--surface)] px-4 py-2 text-[12px] font-medium text-[var(--bone)] transition-colors hover:border-[var(--bone)]"
+          >
+            View case study
+            <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+          </Link>
+
+          {liveLink ? (
+            <a
+              href={liveLink.href}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-[var(--pill)] border border-transparent bg-[var(--bone)] px-4 py-2 text-[12px] font-medium text-[var(--ink)] transition-opacity hover:opacity-85"
+            >
+              Visit website
+              <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+            </a>
+          ) : null}
+        </div>
       </div>
-    </Link>
+    </article>
   );
 }

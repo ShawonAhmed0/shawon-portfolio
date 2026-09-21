@@ -4,8 +4,8 @@
     "name": "Shawon Ahmed",
     "mark": "Shawon Ahmed",
     "title": "Shawon Ahmed — Web Developer & Video Editor",
-    "role": "Software Engineer × Performance Creative",
-    "intro": "Web developer and video editor. I build modern digital products and create high-performing visual experiences.",
+    "role": "Web Developer × Performance Video Editor",
+    "intro": "I build maintainable web products and edit performance-focused video for teams that need clear, reliable digital work.",
     "year": "2026"
   },
   "portrait": {
@@ -41,7 +41,7 @@
       "timecode": "00:00:12:04",
       "label": "SOFTWARE",
       "heading": "BUILD",
-      "body": "Web developer building modern web applications and AI-powered products.",
+      "body": "Full-stack web developer building responsive products with authentication, content systems, databases, and API integrations.",
       "stack": "REACT · NEXT.JS · NODE.JS · POSTGRESQL",
       "cta": "VIEW SOFTWARE",
       "href": "/software"
@@ -50,7 +50,7 @@
       "timecode": "00:00:31:18",
       "label": "CREATIVE",
       "heading": "WATCH",
-      "body": "Video editor making performance-focused ads designed to capture attention.",
+      "body": "Performance video editor turning creator footage and product stories into clear, fast-paced ads for paid social.",
       "stack": "UGC · META ADS · VSL · AI CREATIVE",
       "cta": "VIEW CREATIVE",
       "href": "/editing"
@@ -58,8 +58,9 @@
   },
   "engineering": {
     "about": [
-      "I'm a software developer and creative professional focused on building practical digital products. My background in video editing and performance marketing gives me a different perspective on software—I don't just think about whether a product works, but also how people experience, understand, and engage with it.",
-      "I'm currently focused on modern full-stack development, building with technologies like React, Next.js, Node.js, databases, and AI integrations."
+      "I'm a web developer and creative professional working across software and performance video editing. Since 2021, I have delivered digital work for an agency, a consumer brand, and a nonprofit organization.",
+      "My current work includes a full-time video editing role with relaxe.co and a part-time web development role with Aid For Men Foundation. In software, I focus on practical full-stack products using React, Next.js, Node.js, databases, authenticated dashboards, and third-party APIs.",
+      "Working in both disciplines has made me attentive to usability, communication, and delivery: I define the scope clearly, build responsive interfaces, and shape information so people can understand and act on it."
     ],
     "skills": [
       {
@@ -102,8 +103,8 @@
     ],
     "resume": {
       "label": "DOWNLOAD RESUME",
-      "href": "#",
-      "note": "TODO: resume PDF URL"
+      "href": "",
+      "note": ""
     }
   },
   "editing": {
@@ -154,7 +155,7 @@
       "Short Form"
     ],
     "showreelUrl": "",
-    "showreelNote": "TODO: showreel embed URL",
+    "showreelNote": "",
     "work": [
       {
         "id": "relaxe",
@@ -165,35 +166,35 @@
       },
       {
         "id": "w2",
-        "title": "TODO: Meta ad title",
+        "title": "Direct-Response Product Ad — Concept Cut",
         "category": "Meta Ads",
         "image": "/reel/frame-04.jpg",
         "href": null
       },
       {
         "id": "w3",
-        "title": "TODO: VSL title",
+        "title": "Founder-Led Product Story — VSL Edit",
         "category": "VSLs",
         "image": "/reel/frame-06.jpg",
         "href": null
       },
       {
         "id": "w4",
-        "title": "TODO: AI creative title",
+        "title": "AI-Assisted Lifestyle Creative — Concept",
         "category": "AI Creative",
         "image": "/reel/frame-08.jpg",
         "href": null
       },
       {
         "id": "w5",
-        "title": "TODO: short-form title",
+        "title": "Short-Form Brand Story — Social Cut",
         "category": "Short Form",
         "image": "/reel/frame-10.jpg",
         "href": null
       },
       {
         "id": "w6",
-        "title": "TODO: UGC ad title",
+        "title": "Customer Review Ad — UGC Edit",
         "category": "UGC Ads",
         "image": "/reel/frame-12.jpg",
         "href": null

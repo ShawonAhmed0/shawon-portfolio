@@ -501,6 +501,7 @@ export function ProjectsSection({
           // pins T, and the object stops matching Project.
           accent: "build" as const,
           meta: { role: "", type: "", stack: "" },
+          demoAccess: null,
           problem: "",
           solution: "",
           solutionPoints: [],
@@ -569,6 +570,35 @@ export function ProjectsSection({
               onChange={(stack) => update({ meta: { ...item.meta, stack } })}
               hint="Separate with ·"
             />
+
+            <div className="ad-row ad-row-2">
+              <Text
+                label="Demo email"
+                value={item.demoAccess?.email ?? ""}
+                onChange={(email) =>
+                  update({
+                    demoAccess: {
+                      email,
+                      password: item.demoAccess?.password ?? "",
+                    },
+                  })
+                }
+                hint="Optional. Displayed publicly on the case study."
+              />
+              <Text
+                label="Demo password"
+                value={item.demoAccess?.password ?? ""}
+                onChange={(password) =>
+                  update({
+                    demoAccess: {
+                      email: item.demoAccess?.email ?? "",
+                      password,
+                    },
+                  })
+                }
+                hint="Optional. Fill both demo fields or leave both empty."
+              />
+            </div>
 
             <Area label="Problem" value={item.problem} onChange={(problem) => update({ problem })} />
             <Area label="Solution" value={item.solution} onChange={(solution) => update({ solution })} />

@@ -6,15 +6,19 @@
     "name": "HishabAI",
     "tagline": "Smart হিসাব. Smarter Business.",
     "taglineIsBengali": true,
-    "cardLine": "Smart হিসাব. Smarter Business.",
+    "cardLine": "Bilingual bookkeeping, inventory, and business reporting in one web application.",
     "accent": "build",
     "meta": {
-      "role": "TODO: role on HishabAI",
-      "type": "TODO: project type",
-      "stack": "TODO: HishabAI stack"
+      "role": "Product development · Full-stack implementation",
+      "type": "Business management web application",
+      "stack": "Bilingual UI · Bookkeeping workflows · Inventory · AI-assisted data entry"
     },
-    "problem": "TODO: problem statement for HishabAI",
-    "solution": "A web-based business management and bookkeeping platform designed to make accounting easier for small businesses.",
+    "demoAccess": {
+      "email": "rafiq@paperstar.demo",
+      "password": "HishabDemo2026!"
+    },
+    "problem": "Small business owners often keep sales, expenses, inventory, and customer balances across paper notebooks or disconnected tools. Daily updates become slow, and it is difficult to see a reliable picture of cash, profit, stock, or outstanding balances.",
+    "solution": "HishabAI brings everyday bookkeeping and business management into one guided web application designed for small businesses.",
     "solutionPoints": [
       "Income & expense tracking",
       "Inventory management",
@@ -27,9 +31,12 @@
       "Smart accounting logic behind a simple diary-style interface"
     ],
     "challenges": [
-      "TODO: key challenges on HishabAI"
+      "Keep transaction, cash, profit, and stock summaries consistent as records change",
+      "Support multiple companies under one account without mixing business data",
+      "Make accounting workflows understandable in both English and Bengali",
+      "Turn voice and receipt capture into reviewable entries before they affect the ledger"
     ],
-    "architecture": "TODO: architecture notes for HishabAI",
+    "architecture": "The product groups data by company and connects transactions to accounts, contacts, inventory, and reporting. Reusable dashboard modules surface cash, income, expense, profit, and stock summaries, while guided forms, voice input, and receipt capture feed a review step before entries are saved.",
     "media": [
       {
         "src": "/work/hishabai-1.png",
@@ -59,38 +66,33 @@
     "index": "PROJ 02",
     "timecode": "00:01:24:03",
     "name": "Aid For Men Foundation",
-    "tagline": "Building a scalable content platform for a nonprofit organization",
+    "tagline": "A bilingual nonprofit website with secure content and media management",
     "taglineIsBengali": false,
-    "cardLine": "Building a scalable content platform for a nonprofit organization",
+    "cardLine": "A bilingual nonprofit website with secure content and media management.",
     "accent": "build",
     "meta": {
-      "role": "TODO: role on Aid For Men Foundation",
-      "type": "TODO: project type",
+      "role": "Web Developer (Part-time)",
+      "type": "Nonprofit website and content platform",
       "stack": "Next.js · Tailwind · Bengali UI · Authentication · Admin dashboard · Supabase · Image storage · Blog/content management · User management"
     },
-    "problem": "TODO: problem statement for Aid For Men Foundation",
-    "solution": "Building a scalable content platform for a nonprofit organization",
+    "demoAccess": null,
+    "problem": "The foundation needed one public platform for its mission, campaigns, updates, and media, together with a secure way for authorized staff to maintain that information without editing the codebase.",
+    "solution": "Developed a responsive Bengali-first platform with authenticated administration for publishing content, managing images, and maintaining user access.",
     "solutionPoints": [
-      "Next.js",
-      "Tailwind",
-      "Bengali UI",
-      "Authentication",
-      "Admin dashboard",
-      "Supabase",
-      "Image storage",
-      "Blog/content management",
-      "User management"
+      "Responsive public pages for the foundation's mission, work, and updates",
+      "Bengali-first interface with reusable content layouts",
+      "Secure authentication and role-aware administration",
+      "Content, image, and user management from one dashboard",
+      "Searchable archive for published material",
+      "Production deployment at aidformen.com"
     ],
     "challenges": [
-      "Authentication",
-      "Admin authorization",
-      "Database design",
-      "Image uploads",
-      "Dynamic content",
-      "Responsive UI",
-      "CMS-like functionality"
+      "Separate public publishing workflows from protected administration",
+      "Design role-aware access for content and user management",
+      "Keep image uploads and structured content reliable across devices",
+      "Present Bengali content clearly on mobile and desktop"
     ],
-    "architecture": "TODO: architecture notes for Aid For Men Foundation",
+    "architecture": "A Next.js frontend renders public content stored in Supabase. Authentication and role checks protect the admin dashboard; structured content records power public pages and archive search, while managed storage handles uploaded images. Public routes remain separate from editorial and user-management workflows.",
     "media": [
       {
         "src": "/work/aid-for-men-1.jpg",
@@ -111,7 +113,7 @@
     "links": [
       {
         "label": "Visit live website",
-        "href": "https://aidformen.vercel.app/"
+        "href": "https://aidformen.com/"
       }
     ]
   },
@@ -120,28 +122,31 @@
     "index": "PROJ 03",
     "timecode": "00:01:39:11",
     "name": "Relaxe — Performance Ad Creative",
-    "tagline": null,
+    "tagline": "Performance-focused UGC and paid-social editing",
     "taglineIsBengali": false,
-    "cardLine": "Editing, creative execution, AI visuals",
+    "cardLine": "Performance ad editing, motion graphics, and AI-assisted visual production.",
     "accent": "watch",
     "meta": {
-      "role": "Editing, creative execution, AI visuals",
-      "type": "UGC / Meta Ad",
-      "stack": "TODO: tools used on Relaxe"
+      "role": "Performance Video Editor",
+      "type": "Paid social / UGC advertising",
+      "stack": "Editing · Motion graphics · Captions · AI-assisted visuals"
     },
+    "demoAccess": null,
     "problem": "Explain product benefits while maintaining fast pacing and native-feeling ad creative.",
-    "solution": "TODO: solution summary for Relaxe",
+    "solution": "Shaped creator footage into concise performance ads with front-loaded hooks, benefit-led demonstrations, readable captions, and modular visual variations.",
     "solutionPoints": [
-      "Edited the UGC structure",
-      "Built visual demonstrations",
-      "Added pattern interrupts",
-      "Created AI-generated supporting visuals",
-      "Optimized pacing around the script"
+      "Restructured creator footage around a clear hook and product promise",
+      "Built visual demonstrations around the spoken benefits",
+      "Added captions and pattern interrupts for sound-off viewing",
+      "Created AI-assisted supporting visuals where footage was missing",
+      "Optimized pacing and cutaways around the script"
     ],
     "challenges": [
-      "Explain product benefits while maintaining fast pacing and native-feeling ad creative."
+      "Maintain a native creator feel while keeping the product demonstration clear",
+      "Introduce visual variety without distracting from the spoken message",
+      "Build reusable sequences that support hook and pacing variations"
     ],
-    "architecture": "TODO: creative structure notes for Relaxe",
+    "architecture": "Each edit follows a modular direct-response structure: hook, problem, product demonstration, benefits, proof, and call to action. Captions, cutaways, product close-ups, and motion graphics are organized as replaceable layers so new variants can be produced without rebuilding the full edit.",
     "media": [
       {
         "src": "/work/relaxe-performance-ads-1.webp",
@@ -159,62 +164,6 @@
         "playhead": true
       }
     ],
-    "links": [
-      {
-        "label": "TODO: ad link",
-        "href": "#"
-      }
-    ]
-  },
-  {
-    "slug": "movie-discovery",
-    "index": "PROJ 04",
-    "timecode": "00:01:47:22",
-    "name": "Movie Discovery App (TMDB API)",
-    "tagline": null,
-    "taglineIsBengali": false,
-    "cardLine": "TODO: one-line role for Movie Discovery App",
-    "accent": "build",
-    "meta": {
-      "role": "TODO: role on Movie Discovery App",
-      "type": "TODO: project type",
-      "stack": "TMDB API"
-    },
-    "problem": "TODO: problem statement for Movie Discovery App",
-    "solution": "TODO: solution summary for Movie Discovery App",
-    "solutionPoints": [
-      "API integration",
-      "Search",
-      "Dynamic routing",
-      "Loading/error states",
-      "Responsive design"
-    ],
-    "challenges": [
-      "TODO: key challenges on Movie Discovery App"
-    ],
-    "architecture": "TODO: architecture notes for Movie Discovery App",
-    "media": [
-      {
-        "src": "/work/movie-discovery-1.webp",
-        "alt": "CineFind movie discovery home screen featuring The Last Signal",
-        "playhead": false
-      },
-      {
-        "src": "/work/movie-discovery-2.webp",
-        "alt": "CineFind popular movie browsing grid with six fictional film cards",
-        "playhead": false
-      },
-      {
-        "src": "/work/movie-discovery-3.webp",
-        "alt": "CineFind Shadow Line movie detail screen with rating, synopsis, and trailer controls",
-        "playhead": false
-      }
-    ],
-    "links": [
-      {
-        "label": "TODO: live URL",
-        "href": "#"
-      }
-    ]
+    "links": []
   }
 ]

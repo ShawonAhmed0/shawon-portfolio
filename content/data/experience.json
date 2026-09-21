@@ -1,10 +1,15 @@
 [
   {
     "period": "2021 — 2022",
-    "employment": "",
+    "employment": "Freelance",
     "accent": "watch",
     "title": "Video Editor — ClueCut",
-    "tags": []
+    "tags": [
+      "Social media editing",
+      "Short-form content",
+      "Client revisions",
+      "Remote collaboration"
+    ]
   },
   {
     "period": "2023 — PRESENT",
@@ -25,12 +30,11 @@
     "accent": "build",
     "title": "Web Developer — Aid For Men Foundation",
     "tags": [
-      "Modern web development",
-      "Full-stack applications",
       "Next.js / React",
-      "Backend systems",
-      "Databases",
-      "AI-powered products"
+      "Supabase",
+      "Authentication and admin tools",
+      "Content and media management",
+      "Responsive Bengali UI"
     ]
   }
 ]

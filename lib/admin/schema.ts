@@ -319,6 +319,28 @@ export function parseProjects(input: unknown, c = new Check()): Project[] {
   const list = c.arr("projects", input).map((item, i) => {
     const o = c.obj(`projects[${i}]`, item);
     const meta = c.obj(`projects[${i}].meta`, o.meta);
+    const demo =
+      o.demoAccess === null || o.demoAccess === undefined
+        ? null
+        : c.obj(`projects[${i}].demoAccess`, o.demoAccess);
+    const demoEmail = demo
+      ? c.str(`projects[${i}].demoAccess.email`, demo.email, {
+          allowEmpty: true,
+        })
+      : "";
+    const demoPassword = demo
+      ? c.str(`projects[${i}].demoAccess.password`, demo.password, {
+          allowEmpty: true,
+        })
+      : "";
+
+    if ((demoEmail.length > 0) !== (demoPassword.length > 0)) {
+      c.fail(
+        `projects[${i}].demoAccess`,
+        "demo email and password must be provided together",
+      );
+    }
+
     return {
       slug: c.slug(`projects[${i}].slug`, o.slug),
       index: c.str(`projects[${i}].index`, o.index),
@@ -333,6 +355,10 @@ export function parseProjects(input: unknown, c = new Check()): Project[] {
         type: c.str(`projects[${i}].meta.type`, meta.type),
         stack: c.str(`projects[${i}].meta.stack`, meta.stack),
       },
+      demoAccess:
+        demoEmail.length > 0 && demoPassword.length > 0
+          ? { email: demoEmail, password: demoPassword }
+          : null,
       problem: c.str(`projects[${i}].problem`, o.problem),
       solution: c.str(`projects[${i}].solution`, o.solution),
       solutionPoints: c.strList(`projects[${i}].solutionPoints`, o.solutionPoints),

@@ -67,6 +67,12 @@ export default async function ProjectPage({ params }: PageProps) {
   const solutionPoints = realList(project.solutionPoints);
   const challenges = realList(project.challenges);
   const architecture = real(project.architecture);
+  const demoEmail = real(project.demoAccess?.email);
+  const demoPassword = real(project.demoAccess?.password);
+  const demoAccess =
+    demoEmail && demoPassword
+      ? { email: demoEmail, password: demoPassword }
+      : null;
   const metaRows = (
     [
       ["ROLE", real(project.meta.role)],
@@ -125,6 +131,43 @@ export default async function ProjectPage({ params }: PageProps) {
                   </p>
                 </div>
               ))}
+            </FadeIn>
+          ) : null}
+
+          {demoAccess ? (
+            <FadeIn
+              delay={0.16}
+              className="panel ground-build mt-5 p-6 md:p-8"
+            >
+              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="t-label" style={{ color: accentVar }}>
+                    DEMO ACCESS
+                  </p>
+                  <h2 className="t-h3 mt-3 text-[var(--bone)]">
+                    Explore HishabAI with the shared demo account
+                  </h2>
+                  <p className="t-body mt-3 max-w-[58ch]">
+                    Use these credentials on the live demo. The account contains
+                    sample data intended for portfolio review.
+                  </p>
+                </div>
+
+                <dl className="grid shrink-0 gap-3 sm:grid-cols-2">
+                  <div className="rounded-[12px] bg-[var(--surface-2)] px-4 py-3">
+                    <dt className="t-label">DEMO EMAIL</dt>
+                    <dd className="mt-2 select-all font-mono text-[13px] text-[var(--bone)]">
+                      {demoAccess.email}
+                    </dd>
+                  </div>
+                  <div className="rounded-[12px] bg-[var(--surface-2)] px-4 py-3">
+                    <dt className="t-label">PASSWORD</dt>
+                    <dd className="mt-2 select-all font-mono text-[13px] text-[var(--bone)]">
+                      {demoAccess.password}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
             </FadeIn>
           ) : null}
         </div>
